@@ -1,4 +1,5 @@
 import { AppColors } from '../constants/AppConfig';
+import { NavBar } from '../components/common/NavBar';
 
 interface LegalSection {
   title: string;
@@ -88,19 +89,12 @@ export struct LegalDocumentPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => this.navStack.pop())
-          Text(this.title())
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: this.title(),
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         Scroll() {
           Column({ space: 16 }) {
@@ -150,6 +144,7 @@ export struct LegalDocumentPage {
           .width('100%')
           .padding({ left: 16, right: 16, top: 12, bottom: 30 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

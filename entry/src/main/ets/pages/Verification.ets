@@ -6,6 +6,7 @@ import { MyVerification, SubmitVerificationBody } from '../model/Types';
 import { AppColors } from '../constants/AppConfig';
 import { LoadingView } from '../components/common/LoadingView';
 import { FormField } from '../components/common/FormField';
+import { NavBar } from '../components/common/NavBar';
 
 @Component
 export struct VerificationPage {
@@ -137,21 +138,12 @@ export struct VerificationPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => {
-              this.navStack.pop();
-            })
-          Text('学生认证')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: '学生认证',
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         if (this.loading) {
           LoadingView()
@@ -224,6 +216,7 @@ export struct VerificationPage {
             .width('100%')
             .padding({ left: 16, right: 16 })
           }
+          .align(Alignment.Top)
           .layoutWeight(1)
         }
       }

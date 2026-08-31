@@ -6,6 +6,13 @@ import { AppColors } from '../../constants/AppConfig';
 import { PostCard } from '../business/PostCard';
 import { LoadingView } from '../common/LoadingView';
 import { EmptyState } from '../common/EmptyState';
+import { NavBar } from '../common/NavBar';
+
+/** 排序选项 */
+interface SortOption {
+  key: string;
+  label: string;
+}
 
 /** 首页信息流：顶部轮播图、常用服务导航、热门话题、帖子列表。 */
 @Component
@@ -19,6 +26,13 @@ export struct HomeTab {
   @State settings: PublicSettings = { hot_topics: [], greeting: '' };
   @State tools: CampusTool[] = [];
   @State posts: Post[] = [];
+  @State sortMode: string = 'time';
+  private readonly sortOptions: SortOption[] = [
+    { key: 'time', label: '最新' },
+    { key: 'comments', label: '评论' },
+    { key: 'likes', label: '点赞' },
+    { key: 'bookmarks', label: '收藏' },
+  ];
   private likingIds: Set<number> = new Set<number>();
   private bookmarkingIds: Set<number> = new Set<number>();
 
@@ -125,6 +139,7 @@ export struct HomeTab {
       pinned: post.pinned,
       likes: Math.max(0, post.likes + (post.liked ? -1 : 1)),
       comments: post.comments,
+      bookmarks: post.bookmarks,
       liked: !post.liked,
       bookmarked: post.bookmarked,
       created_at: post.created_at,
@@ -143,6 +158,7 @@ export struct HomeTab {
       pinned: post.pinned,
       likes: post.likes,
       comments: post.comments,
+      bookmarks: Math.max(0, post.bookmarks + (post.bookmarked ? -1 : 1)),
       liked: post.liked,
       bookmarked: !post.bookmarked,
       created_at: post.created_at,
@@ -152,6 +168,24 @@ export struct HomeTab {
 
   private patchPost(updated: Post): void {
     this.posts = this.posts.map((post: Post) => post.id === updated.id ? updated : post);
+  }
+
+  /** 按当前排序模式返回帖子列表；置顶帖始终保持在前面。 */
+  private sortedPosts(): Post[] {
+    const list: Post[] = [...this.posts];
+    if (this.sortMode === 'comments') {
+      list.sort((a: Post, b: Post) => b.comments - a.comments);
+    } else if (this.sortMode === 'likes') {
+      list.sort((a: Post, b: Post) => b.likes - a.likes);
+    } else if (this.sortMode === 'bookmarks') {
+      // 按收藏总数排序（服务端 Post.bookmarks）
+      list.sort((a: Post, b: Post) => b.bookmarks - a.bookmarks);
+    } else {
+      // 默认时间顺序（服务端返回即时间序，此处再兜底按时间倒序）
+      list.sort((a: Post, b: Post) => b.created_at.localeCompare(a.created_at));
+    }
+    // 置顶帖保持在最前
+    return list.sort((a: Post, b: Post) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
   }
 
   private postRenderKey(post: Post): string {
@@ -183,9 +217,17 @@ export struct HomeTab {
     return tool.type === 'link' ? '🔗' : '🧰';
   }
 
+  /** 常用服务区行数：AI 助手 + 工具每排 4 个，最多 2 排；只有 1 排时内容区自动向上补齐。 */
+  private toolRows(): number {
+    return Math.min(2, Math.max(1, Math.ceil((this.tools.length + 1) / 4)));
+  }
+
   build() {
     Column() {
-      // 顶部：仅保留搜索入口，不放页面标题文字
+      // 顶部：与消息页一致的居中标题栏
+      NavBar({ title: '沈大社区', showBack: false })
+
+      // 搜索入口
       Row() {
         Row({ space: 6 }) {
           Image($r('app.media.ic_search'))
@@ -208,6 +250,23 @@ export struct HomeTab {
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 12, bottom: 4 })
+
+      // 排序筛选栏：默认时间顺序，可切换评论 / 点赞 / 收藏
+      Row({ space: 8 }) {
+        ForEach(this.sortOptions, (option: SortOption) => {
+          Text(option.label)
+            .fontSize(13)
+            .fontColor(this.sortMode === option.key ? Color.White : AppColors.TEXT_SECONDARY)
+            .padding({ left: 14, right: 14, top: 6, bottom: 6 })
+            .backgroundColor(this.sortMode === option.key ? AppColors.PRIMARY : AppColors.CARD_BG)
+            .borderRadius(15)
+            .onClick(() => {
+              this.sortMode = option.key;
+            })
+        }, (option: SortOption) => option.key)
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 6, bottom: 6 })
 
       if (this.loading) {
         LoadingView()
@@ -312,11 +371,11 @@ export struct HomeTab {
                 }, (tool: CampusTool) => `${tool.id}`)
               }
               .columnsTemplate('1fr 1fr 1fr 1fr')
-              .rowsTemplate('1fr 1fr')
+              .rowsTemplate(this.toolRows() > 1 ? '1fr 1fr' : '1fr')
               .columnsGap(10)
               .rowsGap(10)
               .width('100%')
-              .height(170)
+              .height(this.toolRows() > 1 ? 170 : 80)
             }
 
             // 热门话题
@@ -341,7 +400,7 @@ export struct HomeTab {
               }
             }
 
-            ForEach(this.posts, (post: Post) => {
+            ForEach(this.sortedPosts(), (post: Post) => {
               ListItem() {
                 PostCard({
                   post: post,

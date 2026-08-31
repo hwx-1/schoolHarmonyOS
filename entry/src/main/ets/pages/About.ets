@@ -1,5 +1,6 @@
 import { AppColors, AppConfig } from '../constants/AppConfig';
 import { LegalDocumentParam } from '../model/Types';
+import { NavBar } from '../components/common/NavBar';
 
 /** 关于页：集中展示版本、产品说明与合规入口。 */
 @Component
@@ -14,19 +15,12 @@ export struct AboutPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => this.navStack.pop())
-          Text('关于沈大社区')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: '关于沈大社区',
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         Scroll() {
           Column({ space: 18 }) {
@@ -79,6 +73,7 @@ export struct AboutPage {
           .width('100%')
           .padding({ left: 16, right: 16 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

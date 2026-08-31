@@ -1,31 +1,37 @@
+import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Api } from '../../service/Api';
-import { ApiError } from '../../service/Http';
 import {
   AppNotification,
   ChatParam,
   DirectConversationItem,
-  NotificationDetailParam,
-  UnreadResp,
+  DirectMessage,
 } from '../../model/Types';
 import { AppColors } from '../../constants/AppConfig';
-import { NotificationItemView } from '../business/NotificationItemView';
 import { ConversationItemView } from '../business/ConversationItemView';
 import { LoadingView } from '../common/LoadingView';
 import { EmptyState } from '../common/EmptyState';
+import { NavBar } from '../common/NavBar';
 import { AppState } from '../../service/AppState';
+import { Session } from '../../service/Session';
 
-/** 消息页：系统通知 + 私信会话。 */
+const TAG = 'MessagesTab';
+const DOMAIN = 0x0001;
+
+/**
+ * 消息页（抖音私信模式）：
+ * 顶部「互动通知」聚合入口卡片（带未读冒泡与最新一条预览），点入才展示通知列表；
+ * 下方每个私信会话各为一张独立入口卡片。
+ */
 @Component
 export struct MessagesTab {
   @Consume('navStack') navStack: NavPathStack;
   @StorageLink('xsnbb_message_revision') @Watch('onMessageRevisionChange') messageRevision: number = 0;
-  @State segment: number = 0;
-  @State notificationFilter: string = 'all';
+  @StorageProp('xsnbb_unread_count') noticeUnread: number = 0;
   @State loading: boolean = true;
   @State refreshing: boolean = false;
-  @State notifications: AppNotification[] = [];
-  @State unread: number = 0;
   @State conversations: DirectConversationItem[] = [];
+  /** 最新一条互动通知标题，作为入口卡片预览文案。 */
+  @State latestNotice: string = '';
 
   aboutToAppear(): void {
     this.loadAll();
@@ -37,251 +43,135 @@ export struct MessagesTab {
     }
   }
 
-  private toast(message: string): void {
-    try {
-      this.getUIContext().getPromptAction().showToast({ message });
-    } catch {
-      // Toast 失败不影响主流程
-    }
-  }
-
   private async loadAll(): Promise<void> {
     try {
       const resp = await Api.notifications();
-      this.notifications = resp.items;
-      this.unread = resp.unread;
       let latestId = 0;
+      let latestAt = '';
+      let latestTitle = '';
       resp.items.forEach((item: AppNotification) => {
         latestId = Math.max(latestId, item.id);
+        if (item.created_at >= latestAt) {
+          latestAt = item.created_at;
+          latestTitle = item.title;
+        }
       });
+      this.latestNotice = latestTitle;
       AppState.syncNotificationSummary(resp.unread, latestId);
-    } catch {
+    } catch (e) {
+      // 通知摘要加载失败保留现有状态；保留日志便于联调定位
+      hilog.error(DOMAIN, TAG, `loadAll notifications failed: ${(e as Error).message}`);
     }
     try {
       const convResp = await Api.listDirectConversations();
       this.conversations = convResp.items;
-    } catch {
+      AppState.setDirectUnreadCount(this.unreadDirectCount());
+    } catch (e) {
+      // 会话加载失败保留现有列表；保留日志便于联调定位
+      hilog.error(DOMAIN, TAG, `loadAll conversations failed: ${(e as Error).message}`);
     }
     this.loading = false;
     this.refreshing = false;
   }
 
-  private async markAllRead(): Promise<void> {
-    if (this.unread === 0) {
-      return;
-    }
-    try {
-      const resp = await Api.markNotificationsRead([]);
-      this.unread = resp.unread;
-      this.notifications = this.notifications.map((item: AppNotification) => {
-        const copy: AppNotification = {
-          id: item.id,
-          type: item.type,
-          title: item.title,
-          body: item.body,
-          ref_type: item.ref_type,
-          ref_id: item.ref_id,
-          read: true,
-          created_at: item.created_at,
-        };
-        return copy;
-      });
-    } catch (err) {
-      this.toast(err instanceof ApiError ? err.message : '操作失败');
-    }
-  }
-
-  private notificationCategory(type: string): string {
-    if (type === 'like' || type === 'bookmark') {
-      return 'likes';
-    }
-    if (type === 'comment' || type === 'reply') {
-      return 'comments';
-    }
-    return 'system';
-  }
-
-  private filterCount(filter: string): number {
-    return this.notifications.filter((item: AppNotification) =>
-      this.notificationCategory(item.type) === filter).length;
-  }
-
-  private filteredNotifications(): AppNotification[] {
-    if (this.notificationFilter === 'all') {
-      return this.notifications;
-    }
-    return this.notifications.filter((item: AppNotification) =>
-      this.notificationCategory(item.type) === this.notificationFilter);
-  }
-
-  private readSnapshot(item: AppNotification): AppNotification {
-    return {
-      id: item.id,
-      type: item.type,
-      title: item.title,
-      body: item.body,
-      ref_type: item.ref_type,
-      ref_id: item.ref_id,
-      read: true,
-      created_at: item.created_at,
-    };
-  }
-
-  private syncReadState(
-    itemId: number,
-    previousUnread: number,
-    previousNotifications: AppNotification[],
-  ): void {
-    Api.markNotificationsRead([itemId]).then((response: UnreadResp) => {
-      this.unread = response.unread;
-    }).catch(() => {
-      // 服务端失败时回滚未读状态，避免气泡与真实数据不一致。
-      this.unread = previousUnread;
-      this.notifications = [...previousNotifications];
-      AppState.setUnreadCount(previousUnread);
+  /** 私信未读数：所有会话中对方发来且状态不是已读的消息总数。 */
+  private unreadDirectCount(): number {
+    let count = 0;
+    this.conversations.forEach((conversation: DirectConversationItem) => {
+      count += this.unreadOfConversation(conversation);
     });
+    return count;
   }
 
-  private openNotification(item: AppNotification): void {
-    let detailItem = item;
-    if (!item.read) {
-      const previousUnread = this.unread;
-      const previousNotifications = [...this.notifications];
-      detailItem = this.readSnapshot(item);
-      this.unread = Math.max(0, this.unread - 1);
-      this.notifications = this.notifications.map((notification: AppNotification) => {
-        if (notification.id !== item.id) {
-          return notification;
-        }
-        return this.readSnapshot(notification);
-      });
-      AppState.setUnreadCount(this.unread);
-      this.syncReadState(item.id, previousUnread, previousNotifications);
-    }
-    const param: NotificationDetailParam = { notification: detailItem };
-    this.navStack.pushPath({ name: 'NotificationDetail', param: param });
+  /** 单个会话的未读数：对方发来且状态不是已读的消息条数（作为原始类型传给卡片，保证随状态刷新）。 */
+  private unreadOfConversation(conversation: DirectConversationItem): number {
+    const myId = Session.currentAccount()?.id ?? -1;
+    let count = 0;
+    conversation.messages.forEach((message: DirectMessage) => {
+      if (message.sender_id !== myId && message.status !== 'read') {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  /** 进入会话后本地立即把对方消息置为已读，未读数冒泡即时消失；服务端状态由聊天页已读协议持久化。 */
+  private markConversationMessagesRead(conversationId: number): void {
+    const myId = Session.currentAccount()?.id ?? -1;
+    this.conversations = this.conversations.map((conversation: DirectConversationItem) => {
+      if (conversation.id !== conversationId) {
+        return conversation;
+      }
+      const copy: DirectConversationItem = {
+        id: conversation.id,
+        other: conversation.other,
+        unlocked: conversation.unlocked,
+        updated_at: conversation.updated_at,
+        messages: conversation.messages.map((message: DirectMessage) => {
+          if (message.sender_id === myId || message.status === 'read') {
+            return message;
+          }
+          const messageCopy: DirectMessage = {
+            id: message.id,
+            sender_id: message.sender_id,
+            text: message.text,
+            system: message.system,
+            status: 'read',
+            created_at: message.created_at,
+          };
+          return messageCopy;
+        }),
+      };
+      return copy;
+    });
+    // 底栏冒泡立即更新，不等待下次拉取
+    AppState.setDirectUnreadCount(this.unreadDirectCount());
   }
 
   build() {
     Column() {
-      Row() {
-        Text('消息')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(AppColors.TEXT_PRIMARY)
-        Blank()
-        if (this.segment === 0 && this.unread > 0) {
-          Text('全部已读')
-            .fontSize(12)
-            .fontColor(AppColors.PRIMARY)
-            .onClick(() => this.markAllRead())
-        }
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 14, bottom: 2 })
-
-      Row({ space: 24 }) {
-        this.MessageTab('通知', 0)
-        this.MessageTab('私信', 1)
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16 })
-
-      if (this.segment === 0) {
-        Row({ space: 10 }) {
-          this.FilterCard('赞同收藏', '♥', '#E5484D', 'likes')
-          this.FilterCard('评论回复', '●', AppColors.PRIMARY, 'comments')
-          this.FilterCard('系统通知', '✦', '#7C5CFC', 'system')
-        }
-        .width('100%')
-        .padding({ left: 12, right: 12, top: 12, bottom: 10 })
-
-        Row() {
-          Text(this.notificationFilter === 'all' ? '最新通知' : '筛选结果')
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-          Blank()
-          if (this.notificationFilter !== 'all') {
-            Text('查看全部')
-              .fontSize(12)
-              .fontColor(AppColors.PRIMARY)
-              .onClick(() => {
-                this.notificationFilter = 'all';
-              })
-          }
-        }
-        .width('100%')
-        .padding({ left: 16, right: 16, bottom: 8 })
-      }
+      NavBar({
+        title: '消息',
+        showBack: false,
+      })
 
       if (this.loading) {
         LoadingView()
       } else {
         Refresh({ refreshing: $$this.refreshing }) {
           List({ space: 8 }) {
-            if (this.segment === 0) {
-              ForEach(this.filteredNotifications(), (item: AppNotification) => {
-                ListItem() {
-                  NotificationItemView({
-                    notification: item,
-                    onOpen: (target: AppNotification) => this.openNotification(target)
-                  })
-                }
-              }, (item: AppNotification) => `${item.id}`)
-              if (this.filteredNotifications().length === 0) {
-                ListItem() {
-                  EmptyState({ title: '暂无此类通知', desc: '新的校园互动会出现在这里' })
-                }
-              }
-            } else {
+            // 互动通知聚合入口卡片：点入才展示通知列表
+            ListItem() {
+              this.NoticeEntry()
+            }
+
+            if (this.conversations.length > 0) {
               ListItem() {
-                Row({ space: 10 }) {
-                  Stack() {
-                    Text('✉')
-                      .fontSize(18)
-                      .fontColor(AppColors.PRIMARY)
-                  }
-                  .width(40)
-                  .height(40)
-                  .borderRadius(20)
-                  .backgroundColor('#142E6BE6')
-                  Column({ space: 2 }) {
-                    Text('私信会话')
-                      .fontSize(15)
-                      .fontWeight(FontWeight.Medium)
-                      .fontColor(AppColors.TEXT_PRIMARY)
-                    Text(`${this.conversations.length} 个最近联系人`)
-                      .fontSize(11)
-                      .fontColor(AppColors.TEXT_SECONDARY)
-                  }
-                  .alignItems(HorizontalAlign.Start)
-                }
-                .width('100%')
-                .padding(14)
-                .backgroundColor('#F0F5FF')
-                .borderRadius(12)
+                this.SectionLabel('私信')
               }
               ForEach(this.conversations, (item: DirectConversationItem) => {
                 ListItem() {
                   ConversationItemView({
                     conversation: item,
+                    unread: this.unreadOfConversation(item),
                     onOpen: (target: DirectConversationItem) => {
+                      this.markConversationMessagesRead(target.id);
                       const param: ChatParam = { id: target.id, name: target.other.nickname };
                       this.navStack.pushPath({ name: 'Chat', param: param });
                     }
                   })
                 }
               }, (item: DirectConversationItem) => `${item.id}`)
-              if (this.conversations.length === 0) {
-                ListItem() {
-                  EmptyState({ title: '暂无私信', desc: '和同学打个招呼吧' })
-                }
+            }
+
+            if (this.conversations.length === 0 && this.latestNotice.length === 0) {
+              ListItem() {
+                EmptyState({ title: '暂无消息', desc: '新的校园互动会出现在这里' })
               }
             }
           }
           .width('100%')
-          .padding({ left: 12, right: 12, bottom: 12 })
+          .padding({ left: 12, right: 12, top: 4, bottom: 12 })
         }
         .onRefreshing(() => {
           this.refreshing = true;
@@ -295,56 +185,64 @@ export struct MessagesTab {
     .backgroundColor(AppColors.PAGE_BG)
   }
 
+  /** 互动通知入口卡片：铃铛图标 + 最新一条预览，未读数冒泡固定在卡片右侧。 */
   @Builder
-  private MessageTab(label: string, index: number) {
-    Column({ space: 7 }) {
-      Text(label)
-        .fontSize(15)
-        .fontWeight(this.segment === index ? FontWeight.Medium : FontWeight.Normal)
-        .fontColor(this.segment === index ? AppColors.TEXT_PRIMARY : AppColors.TEXT_SECONDARY)
-      Divider()
-        .strokeWidth(this.segment === index ? 2 : 0)
-        .color(AppColors.PRIMARY)
-        .width(32)
+  private NoticeEntry() {
+    Row({ space: 12 }) {
+      Stack() {
+        Image($r('app.media.ic_bell'))
+          .width(22)
+          .height(22)
+          .fillColor(AppColors.PRIMARY)
+      }
+      .width(46)
+      .height(46)
+      .borderRadius(23)
+      .backgroundColor('#E8EFFC')
+
+      Column({ space: 4 }) {
+        Text('互动通知')
+          .fontSize(15)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(AppColors.TEXT_PRIMARY)
+        Text(this.latestNotice.length > 0 ? this.latestNotice : '点赞、评论等互动会出现在这里')
+          .fontSize(13)
+          .fontColor(AppColors.TEXT_SECONDARY)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      if (this.noticeUnread > 0) {
+        Text(this.noticeUnread > 99 ? '99+' : `${this.noticeUnread}`)
+          .fontSize(10)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(Color.White)
+          .textAlign(TextAlign.Center)
+          .height(16)
+          .constraintSize({ minWidth: 16 })
+          .padding({ left: 4, right: 4 })
+          .backgroundColor(AppColors.DANGER)
+          .borderRadius(8)
+      }
     }
-    .width(76)
-    .height(44)
-    .justifyContent(FlexAlign.Center)
+    .width('100%')
+    .padding(14)
+    .backgroundColor(AppColors.CARD_BG)
+    .borderRadius(12)
     .onClick(() => {
-      this.segment = index;
+      this.navStack.pushPath({ name: 'Notifications' });
     })
   }
 
   @Builder
-  private FilterCard(label: string, icon: string, color: string, filter: string) {
-    Column({ space: 7 }) {
-      Stack() {
-        Text(icon)
-          .fontSize(17)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(color)
-      }
-      .width(38)
-      .height(38)
-      .borderRadius(19)
-      .backgroundColor('#F3F4F8')
-      Text(label)
-        .fontSize(12)
-        .fontColor(AppColors.TEXT_PRIMARY)
-      Text(`${this.filterCount(filter)} 条`)
-        .fontSize(10)
-        .fontColor(AppColors.TEXT_SECONDARY)
-    }
-    .layoutWeight(1)
-    .padding({ top: 12, bottom: 12 })
-    .backgroundColor(this.notificationFilter === filter ? '#EDF3FF' : AppColors.CARD_BG)
-    .borderRadius(12)
-    .border({
-      width: this.notificationFilter === filter ? 1 : 0,
-      color: this.notificationFilter === filter ? AppColors.PRIMARY : Color.Transparent,
-    })
-    .onClick(() => {
-      this.notificationFilter = this.notificationFilter === filter ? 'all' : filter;
-    })
+  private SectionLabel(label: string) {
+    Text(label)
+      .fontSize(13)
+      .fontWeight(FontWeight.Medium)
+      .fontColor(AppColors.TEXT_SECONDARY)
+      .width('100%')
+      .padding({ left: 4, top: 6, bottom: 2 })
   }
 }

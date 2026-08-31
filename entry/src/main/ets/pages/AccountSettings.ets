@@ -3,6 +3,7 @@ import { ApiError } from '../service/Http';
 import { Session } from '../service/Session';
 import { AppColors, AppConfig } from '../constants/AppConfig';
 import { FormField } from '../components/common/FormField';
+import { NavBar } from '../components/common/NavBar';
 
 @Component
 export struct AccountSettingsPage {
@@ -86,21 +87,12 @@ export struct AccountSettingsPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => {
-              this.navStack.pop();
-            })
-          Text('账号设置')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: '账号设置',
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         Scroll() {
           Column({ space: 16 }) {
@@ -172,6 +164,7 @@ export struct AccountSettingsPage {
           .width('100%')
           .padding({ left: 16, right: 16 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

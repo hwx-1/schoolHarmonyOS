@@ -1,5 +1,6 @@
 import { AppColors } from '../constants/AppConfig';
 import { AppNotification, PostDetailParam } from '../model/Types';
+import { NavBar } from '../components/common/NavBar';
 import { TimeUtil } from '../utils/TimeUtil';
 
 /** 通知详情：承载所有通知类型，并为有关联帖子的消息提供二级入口。 */
@@ -73,19 +74,12 @@ export struct NotificationDetailPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => this.navStack.pop())
-          Text('通知详情')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: '通知详情',
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         Scroll() {
           Column({ space: 16 }) {
@@ -145,6 +139,7 @@ export struct NotificationDetailPage {
           .width('100%')
           .padding({ left: 16, right: 16, top: 12, bottom: 24 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

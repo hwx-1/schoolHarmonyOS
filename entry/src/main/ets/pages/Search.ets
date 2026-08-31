@@ -6,6 +6,12 @@ import { PostCard } from '../components/business/PostCard';
 import { LoadingView } from '../components/common/LoadingView';
 import { EmptyState } from '../components/common/EmptyState';
 
+/** 排序选项 */
+interface SortOption {
+  key: string;
+  label: string;
+}
+
 @Component
 export struct SearchPage {
   @Consume('navStack') navStack: NavPathStack;
@@ -16,6 +22,13 @@ export struct SearchPage {
   @State hotTopics: string[] = [];
   @State searching: boolean = false;
   @State searched: boolean = false;
+  @State sortMode: string = 'time';
+  private readonly sortOptions: SortOption[] = [
+    { key: 'time', label: '最新' },
+    { key: 'comments', label: '评论' },
+    { key: 'likes', label: '点赞' },
+    { key: 'bookmarks', label: '收藏' },
+  ];
 
   aboutToAppear(): void {
     this.loadHotTopics();
@@ -66,6 +79,23 @@ export struct SearchPage {
 
   private patchPost(updated: Post): void {
     this.results = this.results.map((post: Post) => post.id === updated.id ? updated : post);
+  }
+
+  /** 按当前排序模式返回搜索结果；置顶帖始终保持在前面。 */
+  private sortedResults(): Post[] {
+    const list: Post[] = [...this.results];
+    if (this.sortMode === 'comments') {
+      list.sort((a: Post, b: Post) => b.comments - a.comments);
+    } else if (this.sortMode === 'likes') {
+      list.sort((a: Post, b: Post) => b.likes - a.likes);
+    } else if (this.sortMode === 'bookmarks') {
+      // 按收藏总数排序（服务端 Post.bookmarks）
+      list.sort((a: Post, b: Post) => b.bookmarks - a.bookmarks);
+    } else {
+      // 默认时间顺序
+      list.sort((a: Post, b: Post) => b.created_at.localeCompare(a.created_at));
+    }
+    return list.sort((a: Post, b: Post) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
   }
 
   build() {
@@ -129,8 +159,25 @@ export struct SearchPage {
         } else if (this.results.length === 0) {
           EmptyState({ title: '没有找到相关帖子', desc: '换个关键词试试' })
         } else {
+          // 排序筛选栏：默认时间顺序，可切换评论 / 点赞 / 收藏
+          Row({ space: 8 }) {
+            ForEach(this.sortOptions, (option: SortOption) => {
+              Text(option.label)
+                .fontSize(13)
+                .fontColor(this.sortMode === option.key ? Color.White : AppColors.TEXT_SECONDARY)
+                .padding({ left: 14, right: 14, top: 6, bottom: 6 })
+                .backgroundColor(this.sortMode === option.key ? AppColors.PRIMARY : AppColors.CARD_BG)
+                .borderRadius(15)
+                .onClick(() => {
+                  this.sortMode = option.key;
+                })
+            }, (option: SortOption) => option.key)
+          }
+          .width('100%')
+          .padding({ left: 12, right: 12, bottom: 10 })
+
           List({ space: 12 }) {
-            ForEach(this.results, (post: Post) => {
+            ForEach(this.sortedResults(), (post: Post) => {
               ListItem() {
                 PostCard({
                   post: post,

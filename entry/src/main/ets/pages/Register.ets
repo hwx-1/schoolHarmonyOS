@@ -112,22 +112,16 @@ export struct RegisterPage {
       Scroll() {
         Column({ space: 16 }) {
           Row() {
-          Text('‹ 返回登录')
-            .fontSize(14)
-            .fontColor(AppColors.PRIMARY)
+          Text('‹')
+            .fontSize(28)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(AppColors.TEXT_PRIMARY)
             .onClick(() => {
               this.navStack.pop();
             })
-          Blank()
-          Text('注册账号')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-          Blank()
-          Text('    ')
           }
           .width('100%')
-          .margin({ top: 12, bottom: 12 })
+          .justifyContent(FlexAlign.Start)
 
           TextInput({ placeholder: '手机号', text: $$this.phone })
           .type(InputType.PhoneNumber)
@@ -194,8 +188,9 @@ export struct RegisterPage {
           })
         }
         .width('100%')
-        .padding({ left: 28, right: 28, bottom: 32 })
+        .padding({ left: 28, right: 28, top: 32, bottom: 32 })
       }
+      .align(Alignment.Top)
       .scrollBar(BarState.Off)
       .width('100%')
       .height('100%')

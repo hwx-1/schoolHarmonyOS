@@ -6,6 +6,7 @@ import { UpdateProfileBody } from '../model/Types';
 import { AppColors } from '../constants/AppConfig';
 import { FormField } from '../components/common/FormField';
 import { AvatarView } from '../components/common/AvatarView';
+import { NavBar } from '../components/common/NavBar';
 import { createSquareAvatar } from '../utils/AvatarImage';
 
 @Component
@@ -126,28 +127,19 @@ export struct EditProfilePage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('取消')
-            .fontSize(14)
-            .fontColor(AppColors.TEXT_SECONDARY)
-            .onClick(() => {
-              this.navStack.pop();
-            })
-          Blank()
-          Text('编辑资料')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-          Blank()
-          Text(this.saving ? '保存中…' : '保存')
-            .fontSize(14)
-            .fontColor(this.canSave() ? AppColors.PRIMARY : AppColors.TEXT_SECONDARY)
-            .onClick(() => {
-              this.save();
-            })
-        }
-        .width('100%')
-        .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+        NavBar({
+          title: '编辑资料',
+          showBack: false,
+          leftText: '取消',
+          onLeft: () => {
+            this.navStack.pop();
+          },
+          rightText: this.saving ? '保存中…' : '保存',
+          rightEnabled: this.canSave(),
+          onRight: () => {
+            this.save();
+          }
+        })
 
         Scroll() {
           Column({ space: 14 }) {
@@ -211,6 +203,7 @@ export struct EditProfilePage {
           .width('100%')
           .padding({ left: 16, right: 16 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

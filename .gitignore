@@ -11,3 +11,7 @@
 /.clang-tidy
 **/.test
 /.appanalyzer
+
+# 设备日志（调试用，不入库）
+device-*.txt
+__pycache__/

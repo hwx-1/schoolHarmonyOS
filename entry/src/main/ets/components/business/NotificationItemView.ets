@@ -81,8 +81,16 @@ export struct NotificationItemView {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           if (!this.notification.read) {
-            Circle({ width: 8, height: 8 })
-              .fill(AppColors.DANGER)
+            Text('1')
+              .fontSize(10)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(Color.White)
+              .textAlign(TextAlign.Center)
+              .height(16)
+              .constraintSize({ minWidth: 16 })
+              .padding({ left: 4, right: 4 })
+              .backgroundColor(AppColors.DANGER)
+              .borderRadius(8)
           }
         }
         if (this.notification.body.length > 0) {
@@ -101,13 +109,6 @@ export struct NotificationItemView {
             .fontColor(AppColors.TEXT_SECONDARY)
           Text(TimeUtil.format(this.notification.created_at))
             .fontSize(11)
-            .fontColor(AppColors.TEXT_SECONDARY)
-          Blank()
-          Text('查看详情')
-            .fontSize(11)
-            .fontColor(AppColors.PRIMARY)
-          Text('›')
-            .fontSize(18)
             .fontColor(AppColors.TEXT_SECONDARY)
         }
         .width('100%')

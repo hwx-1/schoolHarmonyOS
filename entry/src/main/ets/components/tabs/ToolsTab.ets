@@ -4,6 +4,7 @@ import { CampusTool } from '../../model/Types';
 import { AppColors } from '../../constants/AppConfig';
 import { LoadingView } from '../common/LoadingView';
 import { EmptyState } from '../common/EmptyState';
+import { NavBar } from '../common/NavBar';
 
 /** 百宝箱 Tab：AI 助手入口横幅 + 全部校园工具（4 列网格）。 */
 @Component
@@ -59,6 +60,9 @@ export struct ToolsTab {
 
   build() {
     Column({ space: 12 }) {
+      // 顶部：与消息页一致的居中标题栏
+      NavBar({ title: '百宝箱', showBack: false })
+
       // AI 助手入口横幅：AI 是百宝箱的一部分
       Row({ space: 12 }) {
         Image($r('app.media.ic_sparkle'))

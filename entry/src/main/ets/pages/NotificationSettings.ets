@@ -1,5 +1,6 @@
 import { AppColors } from '../constants/AppConfig';
 import { NotificationSync } from '../service/NotificationSync';
+import { NavBar } from '../components/common/NavBar';
 
 /** 本机消息提醒设置，偏好由 PersistentStorage 持久化。 */
 @Component
@@ -19,19 +20,12 @@ export struct NotificationSettingsPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => this.navStack.pop())
-          Text('消息通知设置')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: '消息通知设置',
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         Scroll() {
           Column({ space: 14 }) {
@@ -71,6 +65,7 @@ export struct NotificationSettingsPage {
           .width('100%')
           .padding({ left: 16, right: 16, top: 12 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

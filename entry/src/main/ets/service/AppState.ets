@@ -1,6 +1,7 @@
 const KEY_POST_REVISION = 'xsnbb_post_revision';
 const KEY_MESSAGE_REVISION = 'xsnbb_message_revision';
 const KEY_UNREAD_COUNT = 'xsnbb_unread_count';
+const KEY_DIRECT_UNREAD_COUNT = 'xsnbb_direct_unread_count';
 const KEY_LATEST_NOTIFICATION_ID = 'xsnbb_latest_notification_id';
 
 /**
@@ -19,6 +20,7 @@ export class AppState {
     AppStorage.setOrCreate<number>(KEY_POST_REVISION, 0);
     AppStorage.setOrCreate<number>(KEY_MESSAGE_REVISION, 0);
     AppStorage.setOrCreate<number>(KEY_UNREAD_COUNT, 0);
+    AppStorage.setOrCreate<number>(KEY_DIRECT_UNREAD_COUNT, 0);
     AppStorage.setOrCreate<number>(KEY_LATEST_NOTIFICATION_ID, 0);
   }
 
@@ -44,6 +46,14 @@ export class AppState {
     const normalized = Math.max(0, count);
     if ((AppStorage.get<number>(KEY_UNREAD_COUNT) ?? 0) !== normalized) {
       AppStorage.setOrCreate<number>(KEY_UNREAD_COUNT, normalized);
+    }
+  }
+
+  /** 私信未读数：与通知未读分开存储，底栏冒泡展示两者合计。 */
+  static setDirectUnreadCount(count: number): void {
+    const normalized = Math.max(0, count);
+    if ((AppStorage.get<number>(KEY_DIRECT_UNREAD_COUNT) ?? 0) !== normalized) {
+      AppStorage.setOrCreate<number>(KEY_DIRECT_UNREAD_COUNT, normalized);
     }
   }
 

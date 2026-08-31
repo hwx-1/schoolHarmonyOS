@@ -6,8 +6,8 @@
 export class AppConfig {
   static readonly APP_VERSION: string = '1.0.0';
   static readonly BUILD_VERSION: string = '1';
-  // 当前真机 / 模拟器联调电脑地址；服务端源码位于 /Users/hhhwenxin/school/server。
-  static readonly API_BASE_URL: string = 'http://192.168.18.227:8080';
+  // 当前真机 / 模拟器联调电脑地址；服务端源码位于 /Users/zhihu/school/server。
+  static readonly API_BASE_URL: string = 'http://10.19.236.131:8080';
   static readonly REQUEST_TIMEOUT_MS: number = 15000;
   static readonly MAX_POST_IMAGES: number = 9;
   static readonly MAX_POST_TAGS: number = 3;

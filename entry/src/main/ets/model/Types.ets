@@ -36,6 +36,7 @@ export interface Post {
   pinned: boolean;
   likes: number;
   comments: number;
+  bookmarks: number;
   liked: boolean;
   bookmarked: boolean;
   created_at: string;
@@ -195,6 +196,7 @@ export interface CreatePostBody {
 
 export interface CreateCommentBody {
   text: string;
+  parent_id?: number;
 }
 
 export interface MarkNotificationsReadBody {
@@ -204,6 +206,14 @@ export interface MarkNotificationsReadBody {
 export interface SendDirectMessageBody {
   text: string;
   system: boolean;
+}
+
+export interface StartDirectConversationBody {
+  user_id: number;
+}
+
+export interface StartDirectConversationResp {
+  item: DirectConversationItem;
 }
 
 export interface CreateAIConversationBody {

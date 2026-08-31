@@ -1,7 +1,11 @@
+import { hilog } from '@kit.PerformanceAnalysisKit';
 import { AppNotification } from '../model/Types';
 import { Api } from './Api';
 import { AppState } from './AppState';
 import { Session } from './Session';
+
+const TAG = 'NotificationSync';
+const DOMAIN = 0x0001;
 
 const NOTIFICATION_POLL_INTERVAL_MS = 3000;
 
@@ -45,8 +49,9 @@ export class NotificationSync {
       if (AppState.syncNotificationSummary(response.unread, latestId)) {
         AppState.publishMessageChange();
       }
-    } catch {
-      // 网络异常时保留现有未读状态，下一个轮询周期自动重试
+    } catch (e) {
+      // 网络异常时保留现有未读状态，下一个轮询周期自动重试；保留日志便于联调定位
+      hilog.error(DOMAIN, TAG, `syncNow failed: ${(e as Error).message}`);
     } finally {
       NotificationSync.syncing = false;
     }

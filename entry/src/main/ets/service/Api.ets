@@ -34,6 +34,8 @@ import {
   SendDirectMessageResp,
   SmsCodeBody,
   SmsCodeResp,
+  StartDirectConversationBody,
+  StartDirectConversationResp,
   SubmitVerificationBody,
   UnreadResp,
   UpdateProfileBody,
@@ -104,8 +106,11 @@ export class Api {
     return request<CommentsResp>(http.RequestMethod.GET, `/api/v1/posts/${postId}/comments`);
   }
 
-  static async createComment(postId: number, text: string): Promise<CreateCommentResp> {
+  static async createComment(postId: number, text: string, parentId?: number): Promise<CreateCommentResp> {
     const body: CreateCommentBody = { text };
+    if (parentId !== undefined && parentId > 0) {
+      body.parent_id = parentId;
+    }
     const response = await request<CreateCommentResp>(
       http.RequestMethod.POST, `/api/v1/posts/${postId}/comments`, body);
     AppState.publishPostChange();
@@ -178,10 +183,27 @@ export class Api {
       http.RequestMethod.GET, `/api/v1/direct-conversations/${id}`);
   }
 
-  static async sendDirectMessage(id: number, text: string): Promise<SendDirectMessageResp> {
-    const body: SendDirectMessageBody = { text, system: false };
+  static async sendDirectMessage(id: number, text: string, system: boolean = false): Promise<SendDirectMessageResp> {
+    const body: SendDirectMessageBody = { text, system };
     const response = await request<SendDirectMessageResp>(
       http.RequestMethod.POST, `/api/v1/direct-conversations/${id}/messages`, body);
+    AppState.publishMessageChange();
+    return response;
+  }
+
+  static async startDirectConversation(userId: number): Promise<StartDirectConversationResp> {
+    const body: StartDirectConversationBody = { user_id: userId };
+    const response = await request<StartDirectConversationResp>(
+      http.RequestMethod.POST, '/api/v1/direct-conversations', body);
+    AppState.publishMessageChange();
+    return response;
+  }
+
+  /** 进入会话后持久化已读：服务端把对方消息置为 read，返回全量私信未读数直接刷新底栏。 */
+  static async markDirectConversationRead(id: number): Promise<UnreadResp> {
+    const response = await request<UnreadResp>(
+      http.RequestMethod.POST, `/api/v1/direct-conversations/${id}/read`);
+    AppState.setDirectUnreadCount(response.unread);
     AppState.publishMessageChange();
     return response;
   }

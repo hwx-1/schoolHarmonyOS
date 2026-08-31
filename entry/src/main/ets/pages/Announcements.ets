@@ -4,6 +4,7 @@ import { AppColors } from '../constants/AppConfig';
 import { AnnouncementCard } from '../components/business/AnnouncementCard';
 import { LoadingView } from '../components/common/LoadingView';
 import { EmptyState } from '../components/common/EmptyState';
+import { NavBar } from '../components/common/NavBar';
 
 @Component
 export struct AnnouncementsPage {
@@ -29,21 +30,12 @@ export struct AnnouncementsPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor(AppColors.TEXT_PRIMARY)
-            .padding({ right: 12 })
-            .onClick(() => {
-              this.navStack.pop();
-            })
-          Text('校园公告')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-        }
-        .width('100%')
-        .padding({ left: 12, right: 16, top: 12, bottom: 8 })
+        NavBar({
+          title: '校园公告',
+          onBack: () => {
+            this.navStack.pop();
+          }
+        })
 
         if (this.loading) {
           LoadingView()

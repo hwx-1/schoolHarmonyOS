@@ -14,6 +14,7 @@ import { EditProfilePage } from './EditProfile';
 import { VerificationPage } from './Verification';
 import { AccountSettingsPage } from './AccountSettings';
 import { NotificationDetailPage } from './NotificationDetail';
+import { NotificationsPage } from './Notifications';
 import { LegalDocumentPage } from './LegalDocument';
 import { NotificationSettingsPage } from './NotificationSettings';
 import { AboutPage } from './About';
@@ -44,6 +45,8 @@ export function PageMap(name: string, param: Object | undefined) {
     PostDetailPage({ postId: (param as PostDetailParam).id })
   } else if (name === 'NotificationDetail') {
     NotificationDetailPage({ notification: (param as NotificationDetailParam).notification })
+  } else if (name === 'Notifications') {
+    NotificationsPage()
   } else if (name === 'LegalDocument') {
     LegalDocumentPage({ documentType: (param as LegalDocumentParam).type })
   } else if (name === 'NotificationSettings') {

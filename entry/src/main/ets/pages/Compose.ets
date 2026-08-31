@@ -4,6 +4,7 @@ import { Api } from '../service/Api';
 import { ApiError, uploadFile } from '../service/Http';
 import { AppColors, AppConfig } from '../constants/AppConfig';
 import { CreatePostBody } from '../model/Types';
+import { NavBar } from '../components/common/NavBar';
 
 /** 待上传图片：本地缓存路径 + 可选的远端 URL（上传完成后回填）。 */
 interface PendingImage {
@@ -141,28 +142,19 @@ export struct ComposePage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('取消')
-            .fontSize(14)
-            .fontColor(AppColors.TEXT_SECONDARY)
-            .onClick(() => {
-              this.navStack.pop();
-            })
-          Blank()
-          Text('发布动态')
-            .fontSize(17)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(AppColors.TEXT_PRIMARY)
-          Blank()
-          Text(this.publishing ? '发布中…' : '发布')
-            .fontSize(14)
-            .fontColor(this.canPublish() ? AppColors.PRIMARY : AppColors.TEXT_SECONDARY)
-            .onClick(() => {
-              this.publish();
-            })
-        }
-        .width('100%')
-        .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+        NavBar({
+          title: '发布动态',
+          showBack: false,
+          leftText: '取消',
+          onLeft: () => {
+            this.navStack.pop();
+          },
+          rightText: this.publishing ? '发布中…' : '发布',
+          rightEnabled: this.canPublish(),
+          onRight: () => {
+            this.publish();
+          }
+        })
 
         Scroll() {
           Column({ space: 14 }) {
@@ -279,6 +271,7 @@ export struct ComposePage {
           .width('100%')
           .padding({ left: 16, right: 16, bottom: 16 })
         }
+        .align(Alignment.Top)
         .layoutWeight(1)
       }
       .width('100%')

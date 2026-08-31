@@ -5,6 +5,7 @@ import { TimeUtil } from '../../utils/TimeUtil';
 import { AppColors } from '../../constants/AppConfig';
 import { LoadingView } from '../common/LoadingView';
 import { EmptyState } from '../common/EmptyState';
+import { NavBar } from '../common/NavBar';
 
 /** AI 问答页：会话列表 + 剩余次数 + 新建会话。 */
 @Component
@@ -50,36 +51,17 @@ export struct AITab {
 
   build() {
     Column() {
-      Row() {
-        Text('‹')
-          .fontSize(26)
-          .fontColor(AppColors.TEXT_PRIMARY)
-          .padding({ right: 12 })
-          .onClick(() => {
-            this.navStack.pop();
-          })
-        Column({ space: 2 }) {
-          Text('AI 校园助手')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(AppColors.TEXT_PRIMARY)
-          Text(`今日剩余 ${this.remaining} 次提问`)
-            .fontSize(12)
-            .fontColor(AppColors.TEXT_SECONDARY)
+      NavBar({
+        title: 'AI 校园助手',
+        subtitle: `今日剩余 ${this.remaining} 次提问`,
+        onBack: () => {
+          this.navStack.pop();
+        },
+        rightButtonText: '+ 新会话',
+        onRightButton: () => {
+          this.createConversation();
         }
-        .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1)
-
-        Button('+ 新会话')
-          .height(34)
-          .fontSize(13)
-          .backgroundColor(AppColors.PRIMARY)
-          .onClick(() => {
-            this.createConversation();
-          })
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 12, bottom: 10 })
+      })
 
       if (this.loading) {
         LoadingView()
