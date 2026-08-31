@@ -1,0 +1,630 @@
+Device info:emulator
+Build info:emulator 6.1.0.115(SP11DEVC00E115R4P11)
+DeviceDebuggable:No
+Fingerprint:b59054eb6fad5d649e7058cc477a55f128493150b8c078e91a0f6cbe54bde57c
+Timestamp:2026-08-30 15:52:29.012
+Module name:com.xsnbb.harmony
+ReleaseType:debug
+CpuAbi:arm64-v8a
+Version:1.0.0
+VersionCode:1000000
+IsSystemApp:No
+PreInstalled:No
+Foreground:Yes
+Pid:14435
+Uid:20020073
+Process life time:35s
+Process Memory(kB): 218677(Rss)
+Device Memory(kB): Total 4006880, Free 1791512, Available 2484000
+Page switch history:
+  15:52:28.380 /ets/pages/Main:Tabs
+  15:51:55.672 /ets/pages/Main:Login
+  15:51:55.274 :enters foreground
+Reason:TypeError
+Error name:TypeError
+Error message:Cannot read property length of undefined
+Stacktrace:
+    at anonymous entry (entry/src/main/ets/components/business/PostCard.ets:73:26)
+    at updateFunc (/usr1/hmos_for_system/src/increment/sourcecode/out/generic_generic_arm_64only/all_all_phone_standard_emulator/obj/foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/stateMgmt.js:9457:1)
+    at observeComponentCreation2 (/usr1/hmos_for_system/src/increment/sourcecode/out/generic_generic_arm_64only/all_all_phone_standard_emulator/obj/foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/stateMgmt.js:9484:1)
+    at initialRender entry (entry/src/main/ets/components/business/PostCard.ets:67:11)
+    at initialRenderView (/usr1/hmos_for_system/src/increment/sourcecode/out/generic_generic_arm_64only/all_all_phone_standard_emulator/obj/foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/stateMgmt.js:8995:1)
+HybridStack:
+#00 pc 000000000040dd14 /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#01 pc 0000000000231634 /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#02 pc 0000000000230d44 /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#03 pc 00000000002e56bc /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#04 pc 0000000000807d68 /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#05 pc 00000000008037c0 /system/lib64/platformsdk/libark_jsruntime.so(panda::ecmascript::ObjectFactory::GetJSError(panda::ecmascript::base::ErrorType const&, char const*, panda::ecmascript::StackCheck)+148)(96ca42846b21f38c57614297c93f7f00)
+#06 pc 000000000060bdbc /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#07 pc 00000000008df270 /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#08 pc 0000000000e12adc /system/lib64/module/arkcompiler/stub.an(RTStub_CallRuntime+44)
+#09 pc 0000000000480ce8 /system/lib64/module/arkcompiler/stub.an(BCStub_HandleLdobjbynameImm8Id16StwCopy+5408)
+#10 pc 0000007f5c9c7ff9 [Unknown]
+#11 at updateFunc (/usr1/hmos_for_system/src/increment/sourcecode/out/generic_generic_arm_64only/all_all_phone_standard_emulator/obj/foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/stateMgmt.js:9457:1)
+#12 at observeComponentCreation2 (/usr1/hmos_for_system/src/increment/sourcecode/out/generic_generic_arm_64only/all_all_phone_standard_emulator/obj/foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/stateMgmt.js:9484:1)
+#13 pc 0000007f5c9c75f4 [Unknown]
+#14 at initialRenderView (/usr1/hmos_for_system/src/increment/sourcecode/out/generic_generic_arm_64only/all_all_phone_standard_emulator/obj/foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/stateMgmt.js:8995:1)
+#15 pc 00000000004af854 /system/lib64/platformsdk/libark_jsruntime.so(96ca42846b21f38c57614297c93f7f00)
+#16 pc 00000000007cd944 /system/lib64/platformsdk/libark_jsruntime.so(panda::FunctionRef::Call(panda::ecmascript::EcmaVM const*, panda::Local<panda::JSValueRef>, panda::Local<panda::JSValueRef> const*, int)+1108)(96ca42846b21f38c57614297c93f7f00)
+#17 pc 0000000002f69be0 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#18 pc 0000000002dbd8c8 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#19 pc 0000000002d45818 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#20 pc 0000000002d497d0 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#21 pc 0000000002d506f4 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#22 pc 000000000138aecc /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#23 pc 00000000016147bc /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::CustomNode::Render(long)+724)(fce96f88ca6468206f0277d5c919a7bb)
+#24 pc 00000000012ec7a4 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#25 pc 00000000012e300c /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#26 pc 00000000012e2e6c /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FrameNode::GetAllChildrenWithBuild(bool)+68)(fce96f88ca6468206f0277d5c919a7bb)
+#27 pc 0000000001453650 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::BoxLayoutAlgorithm::Measure(OHOS::Ace::NG::LayoutWrapper*)+236)(fce96f88ca6468206f0277d5c919a7bb)
+#28 pc 0000000001456450 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#29 pc 00000000012e0280 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FrameNode::Measure(std::__h::optional<OHOS::Ace::NG::LayoutConstraintT<float>> const&)+2028)(fce96f88ca6468206f0277d5c919a7bb)
+#30 pc 00000000017683ec /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#31 pc 0000000001762ed0 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#32 pc 0000000001762c70 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#33 pc 0000000001763f20 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#34 pc 0000000001766400 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#35 pc 0000000001761334 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#36 pc 0000000001456450 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#37 pc 00000000012e0280 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FrameNode::Measure(std::__h::optional<OHOS::Ace::NG::LayoutConstraintT<float>> const&)+2028)(fce96f88ca6468206f0277d5c919a7bb)
+#38 pc 0000000001a3145c /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#39 pc 0000000001456450 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#40 pc 00000000012e0280 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FrameNode::Measure(std::__h::optional<OHOS::Ace::NG::LayoutConstraintT<float>> const&)+2028)(fce96f88ca6468206f0277d5c919a7bb)
+#41 pc 0000000001668410 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FlexLayoutAlgorithm::FinalMeasureInWeightMode()+392)(fce96f88ca6468206f0277d5c919a7bb)
+#42 pc 000000000166afb8 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FlexLayoutAlgorithm::Measure(OHOS::Ace::NG::LayoutWrapper*)+712)(fce96f88ca6468206f0277d5c919a7bb)
+#43 pc 0000000001456450 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#44 pc 00000000012e0280 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FrameNode::Measure(std::__h::optional<OHOS::Ace::NG::LayoutConstraintT<float>> const&)+2028)(fce96f88ca6468206f0277d5c919a7bb)
+#45 pc 00000000012cf8cc /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::FrameNode::CreateLayoutTask(bool, OHOS::Ace::LayoutType)+812)(fce96f88ca6468206f0277d5c919a7bb)
+#46 pc 0000000000dcd0d4 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#47 pc 0000000000dcd684 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#48 pc 0000000000d92830 /system/lib64/platformsdk/libace_compatible.z.so(OHOS::Ace::NG::PipelineContext::FlushVsync(unsigned long, unsigned long)+660)(fce96f88ca6468206f0277d5c919a7bb)
+#49 pc 0000000000d39764 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#50 pc 0000000000d3c0f4 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#51 pc 0000000000c67020 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#52 pc 0000000000c66fc4 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#53 pc 0000000000edb2c0 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#54 pc 0000000000edb100 /system/lib64/platformsdk/libace_compatible.z.so(fce96f88ca6468206f0277d5c919a7bb)
+#55 pc 0000000000059aec /system/lib64/platformsdk/libwmutil.z.so(OHOS::Rosen::VsyncStation::VsyncCallbackInner(long, long)+292)(4218ba8057c75610c881c16d5c0cf08c)
+#56 pc 000000000005aa38 /system/lib64/platformsdk/libwmutil.z.so(4218ba8057c75610c881c16d5c0cf08c)
+#57 pc 0000000000025e98 /system/lib64/libvsync.z.so(OHOS::Rosen::VSyncCallBackListener::HandleVsyncCallbacks(long*, long, int)+720)(95ca4db2cf938499e5b405f7462a2ef1)
+#58 pc 0000000000026b80 /system/lib64/libvsync.z.so(95ca4db2cf938499e5b405f7462a2ef1)
+#59 pc 0000000000025928 /system/lib64/libvsync.z.so(OHOS::Rosen::VSyncCallBackListener::OnReadable(int)+384)(95ca4db2cf938499e5b405f7462a2ef1)
+#60 pc 00000000000201b4 /system/lib64/chipset-sdk-sp/libeventhandler.z.so(bf119d80305c278cf7d8e15fae51a9d1)
+#61 pc 000000000001a6d4 /system/lib64/chipset-sdk-sp/libeventhandler.z.so(OHOS::AppExecFwk::EventHandler::DistributeEvent(std::__h::unique_ptr<OHOS::AppExecFwk::InnerEvent, void (*)(OHOS::AppExecFwk::InnerEvent*)> const&)+968)(bf119d80305c278cf7d8e15fae51a9d1)
+#62 pc 000000000002e414 /system/lib64/chipset-sdk-sp/libeventhandler.z.so(bf119d80305c278cf7d8e15fae51a9d1)
+#63 pc 000000000002de30 /system/lib64/chipset-sdk-sp/libeventhandler.z.so(bf119d80305c278cf7d8e15fae51a9d1)
+#64 pc 000000000002be3c /system/lib64/chipset-sdk-sp/libeventhandler.z.so(OHOS::AppExecFwk::EventRunner::Run()+496)(bf119d80305c278cf7d8e15fae51a9d1)
+#65 pc 00000000000e91b4 /system/lib64/platformsdk/libappkit_native.z.so(OHOS::AppExecFwk::MainThread::Start()+248)(c2df93bf9af8993d19fdcbbb4cda61d8)
+#66 pc 00000000000096d8 /system/lib64/appspawn/appspawn/libappspawn_ace.z.so(5cbd982ba24d621f27739f38f059d46a)
+#67 pc 000000000000bee0 /system/bin/appspawn(8042d17c3e552b16a592a2cc029efb28)
+#68 pc 0000000000015738 /system/bin/appspawn(8042d17c3e552b16a592a2cc029efb28)
+#69 pc 0000000000013bcc /system/bin/appspawn(8042d17c3e552b16a592a2cc029efb28)
+#70 pc 0000000000017538 /system/lib64/chipset-sdk-sp/libbegetutil.z.so(9ce6f85e4bb5c56df9a901bdfbeaaa9f)
+#71 pc 0000000000016fc4 /system/lib64/chipset-sdk-sp/libbegetutil.z.so(9ce6f85e4bb5c56df9a901bdfbeaaa9f)
+#72 pc 0000000000014500 /system/lib64/chipset-sdk-sp/libbegetutil.z.so(9ce6f85e4bb5c56df9a901bdfbeaaa9f)
+#73 pc 00000000000140bc /system/lib64/chipset-sdk-sp/libbegetutil.z.so(9ce6f85e4bb5c56df9a901bdfbeaaa9f)
+#74 pc 00000000000114e0 /system/bin/appspawn(8042d17c3e552b16a592a2cc029efb28)
+#75 pc 000000000000efd8 /system/bin/appspawn(8042d17c3e552b16a592a2cc029efb28)
+#76 pc 00000000000b05c4 /system/lib/ld-musl-aarch64.so.1(58585cbb7e005fa8d03faf34cc10ad37)
+#77 pc 000000000000bcb8 /system/bin/appspawn(8042d17c3e552b16a592a2cc029efb28)
+
+HiLog:
+08-30 15:52:18.709 14435 14435 W C02805/ClientMsgHandler: [K:D:404|163]The client receives a key, Fd:39
+08-30 15:52:18.709 14435 14435 I C02805/InputManagerImpl: [K:D:404|576]id:404 recv
+08-30 15:52:18.709 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:32,InputId:404,wid:54
+08-30 15:52:18.710 14435 14435 I C02805/InputManagerImpl: [K:D:404|601]Key event report keyCode:<private>, id:404 recv
+08-30 15:52:18.710 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:18.710 14435 14435 I C03953/AceSelectOverlay: [(100000:100000:scope)] Close SelectOverlay, by id:30, reason 1
+08-30 15:52:18.710 14435 14435 I C03953/AceSelectOverlay: [(100000:100000:scope)] Remove node [SelectOverlay, 55] from [root, 0]
+08-30 15:52:18.710 14435 14435 I C05a05/SecCompClientEnhanceImpl: [EnhanceClientSerialize]Client sessionInfo sent: pid=14435, sessionId=4197813492, seqNum=******655.
+08-30 15:52:18.710 14435 14435 I C05a05/SecCompClientEnhanceImpl: [EnhanceClientDeserialize]Client sessionInfo updated: pid=14435, sessionId=4197813492, seqNum=******655.
+08-30 15:52:18.711 14435 14435 I C03953/AceSelectOverlay: [(100000:100000:scope)] Remove node [SelectOverlay, 67] from [root, 0]
+08-30 15:52:18.711 14435 14435 I C03953/AceSelectOverlay: [(100000:100000:scope)] SelectOverlay is closed with reason 1 - Holder NA
+08-30 15:52:18.711 14435 14435 I C03956/AceSecurityComponent: [(100000:100000:scope)] security component has not registered, regStatus 0.
+08-30 15:52:18.711 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:18.711 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 30, reason: 1
+08-30 15:52:18.711 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/30handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:18.711 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:18.711 14435 14528 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 404, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:18.721 14435 14435 W C02805/ClientMsgHandler: [K:U:405|163]The client receives a key, Fd:39
+08-30 15:52:18.721 14435 14435 I C02805/InputManagerImpl: [K:U:405|576]id:405 recv
+08-30 15:52:18.721 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:33,InputId:405,wid:54
+08-30 15:52:18.721 14435 14435 I C02805/InputManagerImpl: [K:U:405|601]Key event report keyCode:<private>, id:405 recv
+08-30 15:52:18.722 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/30handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:18.722 14435 14528 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 405, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:18.724 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():371.699951,handleRect.GetY():58.368004
+08-30 15:52:18.724 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:19.490 14435 14528 I C03f00/ArkEtsVm: [a92abbe131f18b0] gc: App cold start finished
+08-30 15:52:19.694 14435 14435 W C02805/ClientMsgHandler: [K:D:406|163]The client receives a key, Fd:39
+08-30 15:52:19.694 14435 14435 I C02805/InputManagerImpl: [K:D:406|576]id:406 recv
+08-30 15:52:19.694 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:34,InputId:406,wid:54
+08-30 15:52:19.695 14435 14435 I C02805/InputManagerImpl: [K:D:406|601]Key event report keyCode:<private>, id:406 recv
+08-30 15:52:19.696 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:19.696 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:19.696 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 30, reason: 1
+08-30 15:52:19.696 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/30handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:19.696 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:19.696 14435 14528 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 406, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:19.699 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():403.619934,handleRect.GetY():58.368004
+08-30 15:52:19.699 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:19.699 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 501, top: 1412, height: 65.
+08-30 15:52:19.699 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 11, range: 10/10/11/11.
+08-30 15:52:19.699 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 501.619934, top 1412.368004, width 7.000000, height 65.631996, selectController_ Start 11, end 11
+08-30 15:52:19.699 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:11
+08-30 15:52:19.699 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:19.700 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:19.706 14435 14435 W C02805/ClientMsgHandler: [K:U:407|163]The client receives a key, Fd:39
+08-30 15:52:19.706 14435 14435 I C02805/InputManagerImpl: [K:U:407|576]id:407 recv
+08-30 15:52:19.706 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:35,InputId:407,wid:54
+08-30 15:52:19.706 14435 14435 I C02805/InputManagerImpl: [K:U:407|601]Key event report keyCode:<private>, id:407 recv
+08-30 15:52:19.706 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/30handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:19.706 14435 14528 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 407, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:19.714 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():403.619934,handleRect.GetY():58.368004
+08-30 15:52:19.714 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:20.309 14435 14435 W C02805/ClientMsgHandler: [K:D:408|163]The client receives a key, Fd:39
+08-30 15:52:20.309 14435 14435 I C02805/InputManagerImpl: [K:D:408|576]id:408 recv
+08-30 15:52:20.309 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:36,InputId:408,wid:54
+08-30 15:52:20.309 14435 14435 I C02805/InputManagerImpl: [K:D:408|601]Key event report keyCode:<private>, id:408 recv
+08-30 15:52:20.310 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] focusActive turns:1, reason:3
+08-30 15:52:20.310 14435 14435 I C04204/WMSScb: InitSSMProxy: proxy has been inited
+08-30 15:52:20.310 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/30handle KeyEvent(secure_field, 0) return: 0
+08-30 15:52:20.310 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Request next focus on node: Column/secure_field by step: 21.
+08-30 15:52:20.310 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] TextInput/secure_fieldtrigger onBlurInternal by 0
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] TextField 30 OnBlur
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] nodeId:[30] TextField reportComponentChangeEvent 11
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] TextField 31 on focus
+08-30 15:52:20.310 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] isScrollableChild_: 1
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] Set needToRequestKeyboardInner_ to 1 : reason 2
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] DoProcessAutoFill
+08-30 15:52:20.310 14435 14435 I C03932/AceAutoFill: [(100000:100000:scope)] ProcessAutoFillAndKeyboard, autoFillReason:2
+08-30 15:52:20.310 14435 14435 I C03932/AceAutoFill: [(100000:100000:scope)] don't need to auto fill.
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] 31 requestKeyboard With Reason SingleClick, sourceType 0
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] node:31, RequestKeyboard set calling window id:54 inputType:7, enterKeyType:6, needKeyboard:1, sourceType:0 placeholderLength:10
+08-30 15:52:20.310 14435 14435 I C01c10/ImsaKit: line: 361, function: AttachExec,isShowKeyboard 1.
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] OnDetach
+08-30 15:52:20.310 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] FinishTextPreview
+08-30 15:52:20.326 14435 14435 I C01c10/ImsaKit: line: 1308, function: OnInputReady,InputMethodController start.
+08-30 15:52:20.326 14435 14435 I C01c10/ImsaKit: line: 406, function: AttachExec,bind imf successfully.
+08-30 15:52:20.326 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:20.326 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 154, top: 1643, height: 66.
+08-30 15:52:20.326 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 0, range: 0/0/0/0.
+08-30 15:52:20.327 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 154.000000, top 1643.000000, width 7.000000, height 66.000000, selectController_ Start 0, end 0
+08-30 15:52:20.327 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] 31 RequestKeyboardByFocusSwitch: onFocus_: 1 Inner: 1 modalCovered: 0
+08-30 15:52:20.327 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] 31 add requestkeyboard task
+08-30 15:52:20.327 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] FocusSwitch end, TextInput/secure_field onBlur, TextInput/secure_field onFocus, start: 2, end: 1, update: 2
+08-30 15:52:20.327 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] current focus node: (TextInput/31). isDynamic: 0
+08-30 15:52:20.327 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:20.327 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Request next focus by default linear algorithm. Return 1.
+08-30 15:52:20.327 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:20.327 14435 14528 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 408, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:20.327 14435 14528 I C04204/WMSScb: InitSSMProxy: proxy has been inited
+08-30 15:52:20.328 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.328 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] scrollRect:RectT (0.00, 136.00) - [1320.00 x 2622.00] caretRect:RectT (154.00, 1643.00) - [7.00 x 66.00] totalOffset()=-0.000000 diffBot=-36.000000
+08-30 15:52:20.328 14435 14435 W C02805/ClientMsgHandler: [K:U:409|163]The client receives a key, Fd:39
+08-30 15:52:20.328 14435 14435 I C02805/InputManagerImpl: [K:U:409|576]id:409 recv
+08-30 15:52:20.328 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:37,InputId:409,wid:54
+08-30 15:52:20.328 14435 14435 I C02805/InputManagerImpl: [K:U:409|601]Key event report keyCode:<private>, id:409 recv
+08-30 15:52:20.329 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] input state now is not at previewing text
+08-30 15:52:20.329 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:20.329 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:20.329 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:20.329 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] node:31, RequestKeyboard set calling window id:54 inputType:7, enterKeyType:6, needKeyboard:1, sourceType:0 placeholderLength:10
+08-30 15:52:20.329 14435 14435 I C01c10/ImsaKit: line: 361, function: AttachExec,isShowKeyboard 1.
+08-30 15:52:20.333 14435 14435 I C01c10/ImsaKit: line: 1308, function: OnInputReady,InputMethodController start.
+08-30 15:52:20.333 14435 14435 I C01c10/ImsaKit: line: 406, function: AttachExec,bind imf successfully.
+08-30 15:52:20.333 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:20.333 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 154, top: 1643, height: 66.
+08-30 15:52:20.333 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 154.000000, top 1643.000000, width 7.000000, height 66.000000, selectController_ Start 0, end 0
+08-30 15:52:20.333 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] Set needToRequestKeyboardInner_ to 0 : reason 4
+08-30 15:52:20.338 14435 14435 I C0420b/WMSKeyboard: transaction: 1, safeHeight: 0, occupied rect: x 0, y 0, w 0, h 0, callingWindowRect: [0 0 1320 2856]
+08-30 15:52:20.338 14435 14435 I C01406/OHOS::RS: BeginSyncTransaction syncId:5523327942676
+08-30 15:52:20.338 14435 14435 I C03959/AceLayout: [(-2:100000:singleton)] [com.xsnbb.harmony][entry][100000]: UpdateViewportConfig Viewport config: size: (1320, 2856) orientation: 0 density: 3.500000 position: (0, 0) transformHint: 0 displayId: 0, windowSizeChangeReason 34, is rsTransaction nullptr 1, updateAvoidAreas size: 5[(0,top [0 0 1320 136] )(1,top [517 45 285 103] )(2,empty)(3,empty)(4,bottom [429 2758 462 98] )], keyboardRect Rect (0.00, 0.00) - [0.00 x 0.00]
+08-30 15:52:20.338 14435 14435 I C04208/WMSLayout: UpdateViewportConfig: Id: 54, reason: 34, windowRect: [0 0 1320 2856], displayOrientation: 0, config[0, 0, 0, 3.500000]
+08-30 15:52:20.338 14435 14435 I C01406/OHOS::RS: CommitSyncTransaction syncId:5523327942676 syncCount: 0 parentPid: 1286
+08-30 15:52:20.338 14435 14435 I C01406/OHOS::RS: ResetSyncTransactionInfo syncId:5523327942676
+08-30 15:52:20.338 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.338 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.338 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] origin positionY: 1354.000000, height 208.000000
+08-30 15:52:20.338 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] keyboardHeight: 0.000000, positionY: 1643.000000, textHeight: 150.000000, rootSize.Height() 2856.000000 adjust: 0.000000 final calculate keyboard offset is 0.000000
+08-30 15:52:20.338 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] navNode id:16, avoidKeyboardOffset:0.000000
+08-30 15:52:20.338 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] navNode id:16, avoidKeyboardOffset:0.000000
+08-30 15:52:20.338 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.340 14435 14435 I C04209/WMSImms: NotifyAvoidAreaChange: win 54 api 23 type 3 area empty
+08-30 15:52:20.340 14435 14435 I C04208/WMSLayout: UpdateViewportConfig: Id: 54, reason: 23, windowRect: [0 0 1320 2856], displayOrientation: 0, config[0, 0, 0, 3.500000]
+08-30 15:52:20.363 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:20.363 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 409, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:20.385 14435 14606 I C03914/AceTextField: [(-1:100000:singleton)] SendKeyboardStatus status: 2
+08-30 15:52:20.385 14435 14606 I C03914/AceTextField: [(-1:100000:singleton)] SetKeyboardStatus status: 1
+08-30 15:52:20.393 14435 14435 I C03914/AceTextField: [(-1:100000:singleton)] NotifyPanelStatusInfo SetImeShow:1
+08-30 15:52:20.395 14435 14606 I C03914/AceTextField: [(-1:100000:singleton)] SendKeyboardStatus status: 2
+08-30 15:52:20.395 14435 14606 I C03914/AceTextField: [(-1:100000:singleton)] SetKeyboardStatus status: 1
+08-30 15:52:20.396 14435 14435 I C0420b/WMSKeyboard: transaction: 0, safeHeight: 1288, occupied rect: x 0, y 1568, w 1320, h 1288, callingWindowRect: [0 0 1320 2856]
+08-30 15:52:20.396 14435 14435 I C04208/WMSLayout: UpdateViewportConfig: Id: 54, reason: 34, windowRect: [0 0 1320 2856], displayOrientation: 0, config[0, 0, 0, 3.500000]
+08-30 15:52:20.396 14435 14435 I C04209/WMSImms: NotifyAvoidAreaChange: win 54 api 23 type 3 area bottom [0 1568 1320 1288] 
+08-30 15:52:20.396 14435 14435 I C04208/WMSLayout: UpdateViewportConfig: Id: 54, reason: 23, windowRect: [0 0 1320 2856], displayOrientation: 0, config[0, 0, 0, 3.500000]
+08-30 15:52:20.396 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.397 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.397 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] origin positionY: 1585.000000, height 208.000000
+08-30 15:52:20.397 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] keyboardHeight: 1288.000000, positionY: 1643.000000, textHeight: 150.000000, rootSize.Height() 2856.000000 adjust: 0.000000 final calculate keyboard offset is -225.000000
+08-30 15:52:20.397 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] navNode id:16, avoidKeyboardOffset:0.000000
+08-30 15:52:20.397 14435 14435 I C03933/AceKeyboard: [(100000:100000:scope)] navNode id:16, avoidKeyboardOffset:-225.000000
+08-30 15:52:20.397 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:20.403 14435 14435 I C03914/AceTextField: [(-1:100000:singleton)] NotifyPanelStatusInfo SetImeShow:1
+08-30 15:52:21.031 14435 14435 W C02805/ClientMsgHandler: [K:D:410|163]The client receives a key, Fd:39
+08-30 15:52:21.031 14435 14435 I C02805/InputManagerImpl: [K:D:410|576]id:410 recv
+08-30 15:52:21.031 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:38,InputId:410,wid:54
+08-30 15:52:21.032 14435 14435 I C02805/InputManagerImpl: [K:D:410|601]Key event report keyCode:<private>, id:410 recv
+08-30 15:52:21.033 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:21.033 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.033 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 31, reason: 1
+08-30 15:52:21.033 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:21.033 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:21.033 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 410, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:21.044 14435 14435 W C02805/ClientMsgHandler: [K:U:411|163]The client receives a key, Fd:39
+08-30 15:52:21.044 14435 14435 I C02805/InputManagerImpl: [K:U:411|576]id:411 recv
+08-30 15:52:21.044 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:39,InputId:411,wid:54
+08-30 15:52:21.044 14435 14435 I C02805/InputManagerImpl: [K:U:411|601]Key event report keyCode:<private>, id:411 recv
+08-30 15:52:21.044 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:21.044 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 411, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:21.045 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():84.419998,handleRect.GetY():58.368004
+08-30 15:52:21.045 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.045 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 182, top: 1418, height: 65.
+08-30 15:52:21.046 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 1, range: 0/0/1/1.
+08-30 15:52:21.046 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 182.419998, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 1, end 1
+08-30 15:52:21.046 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.046 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:1
+08-30 15:52:21.046 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:21.046 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.061 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():84.419998,handleRect.GetY():58.368004
+08-30 15:52:21.061 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.061 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.218 14435 14435 W C02805/ClientMsgHandler: [K:D:412|163]The client receives a key, Fd:39
+08-30 15:52:21.218 14435 14435 I C02805/InputManagerImpl: [K:D:412|576]id:412 recv
+08-30 15:52:21.218 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:40,InputId:412,wid:54
+08-30 15:52:21.218 14435 14435 I C02805/InputManagerImpl: [K:D:412|601]Key event report keyCode:<private>, id:412 recv
+08-30 15:52:21.219 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:21.219 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.219 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 31, reason: 1
+08-30 15:52:21.219 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:21.219 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:21.219 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 412, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:21.230 14435 14435 W C02805/ClientMsgHandler: [K:U:413|163]The client receives a key, Fd:39
+08-30 15:52:21.230 14435 14435 I C02805/InputManagerImpl: [K:U:413|576]id:413 recv
+08-30 15:52:21.230 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:41,InputId:413,wid:54
+08-30 15:52:21.231 14435 14435 I C02805/InputManagerImpl: [K:U:413|601]Key event report keyCode:<private>, id:413 recv
+08-30 15:52:21.231 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():140.419998,handleRect.GetY():58.368004
+08-30 15:52:21.231 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.231 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 238, top: 1418, height: 65.
+08-30 15:52:21.232 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 2, range: 1/1/2/2.
+08-30 15:52:21.232 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 238.419998, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 2, end 2
+08-30 15:52:21.232 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.232 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:2
+08-30 15:52:21.232 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:21.232 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:21.232 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 413, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:21.232 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.247 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():140.419998,handleRect.GetY():58.368004
+08-30 15:52:21.247 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.247 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.612 14435 14435 W C02805/ClientMsgHandler: [K:D:414|163]The client receives a key, Fd:39
+08-30 15:52:21.612 14435 14435 I C02805/InputManagerImpl: [K:D:414|576]id:414 recv
+08-30 15:52:21.612 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:42,InputId:414,wid:54
+08-30 15:52:21.615 14435 14435 I C02805/InputManagerImpl: [K:D:414|601]Key event report keyCode:<private>, id:414 recv
+08-30 15:52:21.617 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:21.617 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.617 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 31, reason: 1
+08-30 15:52:21.617 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:21.617 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:21.617 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 414, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:21.623 14435 14435 W C02805/ClientMsgHandler: [K:U:415|163]The client receives a key, Fd:39
+08-30 15:52:21.623 14435 14435 I C02805/InputManagerImpl: [K:U:415|576]id:415 recv
+08-30 15:52:21.623 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:43,InputId:415,wid:54
+08-30 15:52:21.623 14435 14435 I C02805/InputManagerImpl: [K:U:415|601]Key event report keyCode:<private>, id:415 recv
+08-30 15:52:21.623 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:21.623 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 415, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:21.633 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():196.419998,handleRect.GetY():58.368004
+08-30 15:52:21.633 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.633 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 294, top: 1418, height: 65.
+08-30 15:52:21.633 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 3, range: 2/2/3/3.
+08-30 15:52:21.633 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 294.419998, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 3, end 3
+08-30 15:52:21.634 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.634 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:3
+08-30 15:52:21.634 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:21.634 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.649 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():196.419998,handleRect.GetY():58.368004
+08-30 15:52:21.649 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.649 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.875 14435 14435 W C02805/ClientMsgHandler: [K:D:416|163]The client receives a key, Fd:39
+08-30 15:52:21.875 14435 14435 I C02805/InputManagerImpl: [K:D:416|576]id:416 recv
+08-30 15:52:21.875 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:44,InputId:416,wid:54
+08-30 15:52:21.875 14435 14435 I C02805/InputManagerImpl: [K:D:416|601]Key event report keyCode:<private>, id:416 recv
+08-30 15:52:21.877 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:21.878 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.878 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 31, reason: 1
+08-30 15:52:21.878 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:21.878 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:21.878 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 416, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:21.881 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():252.419998,handleRect.GetY():58.368004
+08-30 15:52:21.881 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.881 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 350, top: 1418, height: 65.
+08-30 15:52:21.881 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 4, range: 3/3/4/4.
+08-30 15:52:21.881 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 350.419998, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 4, end 4
+08-30 15:52:21.881 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:21.881 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:4
+08-30 15:52:21.881 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:21.882 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:21.886 14435 14435 W C02805/ClientMsgHandler: [K:U:417|163]The client receives a key, Fd:39
+08-30 15:52:21.886 14435 14435 I C02805/InputManagerImpl: [K:U:417|576]id:417 recv
+08-30 15:52:21.886 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:45,InputId:417,wid:54
+08-30 15:52:21.887 14435 14435 I C02805/InputManagerImpl: [K:U:417|601]Key event report keyCode:<private>, id:417 recv
+08-30 15:52:21.887 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:21.887 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 417, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:21.897 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():252.419998,handleRect.GetY():58.368004
+08-30 15:52:21.897 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:21.897 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:22.116 14435 14435 W C02805/ClientMsgHandler: [K:D:418|163]The client receives a key, Fd:39
+08-30 15:52:22.116 14435 14435 I C02805/InputManagerImpl: [K:D:418|576]id:418 recv
+08-30 15:52:22.116 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:46,InputId:418,wid:54
+08-30 15:52:22.117 14435 14435 I C02805/InputManagerImpl: [K:D:418|601]Key event report keyCode:<private>, id:418 recv
+08-30 15:52:22.118 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:22.118 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:22.119 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 31, reason: 1
+08-30 15:52:22.119 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:22.119 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:22.119 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 418, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:22.128 14435 14435 W C02805/ClientMsgHandler: [K:U:419|163]The client receives a key, Fd:39
+08-30 15:52:22.128 14435 14435 I C02805/InputManagerImpl: [K:U:419|576]id:419 recv
+08-30 15:52:22.128 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:47,InputId:419,wid:54
+08-30 15:52:22.128 14435 14435 I C02805/InputManagerImpl: [K:U:419|601]Key event report keyCode:<private>, id:419 recv
+08-30 15:52:22.129 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():308.419983,handleRect.GetY():58.368004
+08-30 15:52:22.129 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:22.129 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 406, top: 1418, height: 65.
+08-30 15:52:22.129 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 5, range: 4/4/5/5.
+08-30 15:52:22.129 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 406.419983, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 5, end 5
+08-30 15:52:22.129 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:22.130 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:5
+08-30 15:52:22.130 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:22.131 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:22.131 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:22.131 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 419, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:22.144 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():308.419983,handleRect.GetY():58.368004
+08-30 15:52:22.144 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:22.144 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:22.359 14435 14435 W C02805/ClientMsgHandler: [K:D:420|163]The client receives a key, Fd:39
+08-30 15:52:22.359 14435 14435 I C02805/InputManagerImpl: [K:D:420|576]id:420 recv
+08-30 15:52:22.359 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:48,InputId:420,wid:54
+08-30 15:52:22.360 14435 14435 I C02805/InputManagerImpl: [K:D:420|601]Key event report keyCode:<private>, id:420 recv
+08-30 15:52:22.362 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand len: 1 reason: 1
+08-30 15:52:22.362 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:22.363 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] AddInsertCommand MarkDirtyNode 31, reason: 1
+08-30 15:52:22.363 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 0) return: 1
+08-30 15:52:22.363 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] Focus system handled the key event: code:secure_field/action:0
+08-30 15:52:22.363 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 420, consumed: 1,escTrigger: 0, escDown: 0
+08-30 15:52:22.371 14435 14435 W C02805/ClientMsgHandler: [K:U:421|163]The client receives a key, Fd:39
+08-30 15:52:22.371 14435 14435 I C02805/InputManagerImpl: [K:U:421|576]id:421 recv
+08-30 15:52:22.371 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:49,InputId:421,wid:54
+08-30 15:52:22.372 14435 14435 I C02805/InputManagerImpl: [K:U:421|601]Key event report keyCode:<private>, id:421 recv
+08-30 15:52:22.372 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] OnKeyEventInteral Node process self: Node TextInput/31handle KeyEvent(secure_field, 1) return: 0
+08-30 15:52:22.372 14435 14606 I C0420c/WMSEvent: DispatchKeyEventCallback: id: 421, consumed: 0,escTrigger: 0, escDown: 0
+08-30 15:52:22.376 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():364.419983,handleRect.GetY():58.368004
+08-30 15:52:22.376 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:22.376 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 462, top: 1418, height: 65.
+08-30 15:52:22.376 14435 14435 I C01c10/ImsaKit: line: 922, function: OnSelectionChange,IMC size: 6, range: 5/5/6/6.
+08-30 15:52:22.376 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 462.419983, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 6, end 6
+08-30 15:52:22.377 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:22.377 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] On change event, len:6
+08-30 15:52:22.377 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] addedLen=1, removedLen=0
+08-30 15:52:22.378 14435 14435 W C0390d/AceOverlay: [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:22.392 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():364.419983,handleRect.GetY():58.368004
+08-30 15:52:22.392 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:22.392 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:22.902 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():388.500000,handleRect.GetY():58.368004
+08-30 15:52:22.902 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] gradientMode = 0 fluidLightMode = 0
+08-30 15:52:22.902 14435 14435 I C01c10/ImsaKit: line: 887, function: OnCursorUpdate,left: 486, top: 1418, height: 65.
+08-30 15:52:22.902 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] UpdateCaretInfoToController, left 486.500000, top 1418.368004, width 7.000000, height 65.631996, selectController_ Start 6, end 6
+08-30 15:52:22.902 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:24.197 14435 14606 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] SendKeyboardStatus status: 1
+08-30 15:52:24.197 14435 14606 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] SetKeyboardStatus status: 0
+08-30 15:52:24.201 14435 14606 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] NotifyPanelStatusInfo soft keyboard is closed by user, trigger=0
+08-30 15:52:24.201 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] NotifyKeyboardClosedByUser
+08-30 15:52:24.201 14435 14435 I C0391c/AceFocus: [a92ab1e126c1ce8] [(100000:100000:scope)] Lost focus to view root: NavDestination
+08-30 15:52:24.202 14435 14435 I C0391c/AceFocus: [a92ab1e126c1ce8] [(100000:100000:scope)] TextInput/secure_fieldtrigger onBlurInternal by 4
+08-30 15:52:24.202 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] TextField 31 OnBlur
+08-30 15:52:24.202 14435 14435 E C01406/RSNode: [a92ab1e126c1ce8] RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:24.202 14435 14435 I C0391c/AceFocus: [a92ab1e126c1ce8] [(100000:100000:scope)] FocusSwitch end, TextInput/secure_field onBlur, NavDestination/secure_field onFocus, start: 3, end: 1, update: 0
+08-30 15:52:24.202 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] current focus node: (NavDestination/16). isDynamic: 0
+08-30 15:52:24.202 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] FrameNode(NavDestination/16) notNeedSoftKeyboard.
+08-30 15:52:24.202 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] Ime Shown Or Attached, Need to close keyboard
+08-30 15:52:24.202 14435 14435 I C01c10/ImsaKit: [a92ab1e126c1ce8] line: 520, function: Close,start.
+08-30 15:52:24.202 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] OnDetach
+08-30 15:52:24.202 14435 14527 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] FinishTextPreview
+08-30 15:52:24.203 14435 14527 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] SendKeyboardStatus status: 1
+08-30 15:52:24.203 14435 14527 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] SetKeyboardStatus status: 0
+08-30 15:52:24.204 14435 14527 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] NotifyPanelStatusInfo soft keyboard is closed by user, trigger=1
+08-30 15:52:24.204 14435 14527 W C01c10/ImsaKit: [a92ab1e126c1ce8] line: 1875, function: FinishTextPreview,not bound or listener is nullptr!
+08-30 15:52:24.205 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] FinishTextPreview
+08-30 15:52:24.205 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] SendKeyboardStatus status: 1
+08-30 15:52:24.205 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] SetKeyboardStatus status: 0
+08-30 15:52:24.205 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] PageChange CloseKeyboard FrameNode notNeedSoftKeyboard.
+08-30 15:52:24.205 14435 14435 E C01406/RSNode: [a92ab1e126c1ce8] RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:24.205 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] NotifyKeyboardClosed
+08-30 15:52:24.205 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] NotifyPanelStatusInfo SetImeShow:0
+08-30 15:52:24.206 14435 14435 W C0390d/AceOverlay: [a92ab1e126c1ce8] [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:24.207 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] NotifyKeyboardClosed
+08-30 15:52:24.207 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(-1:100000:singleton)] NotifyPanelStatusInfo SetImeShow:0
+08-30 15:52:24.210 14435 14435 W C0390d/AceOverlay: [a92ab1e126c1ce8] [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:24.210 14435 14435 I C0420b/WMSKeyboard: [a92ab1e126c1ce8] transaction: 1, safeHeight: 0, occupied rect: x 0, y 0, w 0, h 0, callingWindowRect: [0 0 1320 2856]
+08-30 15:52:24.210 14435 14435 I C01406/OHOS::RS: [a92ab1e126c1ce8] BeginSyncTransaction syncId:5523327942677
+08-30 15:52:24.211 14435 14435 I C03959/AceLayout: [a92ab1e126c1ce8] [(-2:100000:singleton)] [com.xsnbb.harmony][entry][100000]: UpdateViewportConfig Viewport config: size: (1320, 2856) orientation: 0 density: 3.500000 position: (0, 0) transformHint: 0 displayId: 0, windowSizeChangeReason 34, is rsTransaction nullptr 1, updateAvoidAreas size: 5[(0,top [0 0 1320 136] )(1,top [517 45 285 103] )(2,empty)(3,empty)(4,bottom [429 2758 462 98] )], keyboardRect Rect (0.00, 0.00) - [0.00 x 0.00]
+08-30 15:52:24.211 14435 14435 I C04208/WMSLayout: [a92ab1e126c1ce8] UpdateViewportConfig: Id: 54, reason: 34, windowRect: [0 0 1320 2856], displayOrientation: 0, config[0, 0, 0, 3.500000]
+08-30 15:52:24.211 14435 14435 I C01406/OHOS::RS: [a92ab1e126c1ce8] CommitSyncTransaction syncId:5523327942677 syncCount: 0 parentPid: 1286
+08-30 15:52:24.211 14435 14435 I C01406/OHOS::RS: [a92ab1e126c1ce8] ResetSyncTransactionInfo syncId:5523327942677
+08-30 15:52:24.211 14435 14435 I C04209/WMSImms: NotifyAvoidAreaChange: win 54 api 23 type 3 area empty
+08-30 15:52:24.211 14435 14435 I C04208/WMSLayout: UpdateViewportConfig: Id: 54, reason: 23, windowRect: [0 0 1320 2856], displayOrientation: 0, config[0, 0, 0, 3.500000]
+08-30 15:52:24.212 14435 14435 W C0390d/AceOverlay: [a92ab1e126c1ce8] [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:24.212 14435 14435 W C0390d/AceOverlay: [a92ab1e126c1ce8] [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:24.212 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] input state now is not at previewing text
+08-30 15:52:24.212 14435 14435 I C03914/AceTextField: [a92ab1e126c1ce8] [(100000:100000:scope)] input state now is not at previewing text
+08-30 15:52:24.212 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] origin positionY: 1585.000000, height 208.000000
+08-30 15:52:24.212 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] use origin arg from the window
+08-30 15:52:24.212 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] keyboardHeight: 0.000000, positionY: 1585.000000, textHeight: 208.000000, rootSize.Height() 2856.000000 adjust: 0.000000 final calculate keyboard offset is 0.000000
+08-30 15:52:24.212 14435 14435 I C03933/AceKeyboard: [a92ab1e126c1ce8] [(100000:100000:scope)] navNode id:16, avoidKeyboardOffset:0.000000
+08-30 15:52:24.213 14435 14435 W C0390d/AceOverlay: [a92ab1e126c1ce8] [(100000:100000:scope)] failed to get foldCreaseRegion
+08-30 15:52:25.358 14435 14435 I C02805/InputKeyFlow: [P:D:424|247]ac: down: 424
+08-30 15:52:25.358 14435 14435 I C02805/InputKeyFlow: [P:D:424|649]recv
+08-30 15:52:25.358 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:4,InputId:424,wid:54,ac:2
+08-30 15:52:25.359 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:424, fId:0, T:0, I=0, M=0
+08-30 15:52:25.359 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] focusActive turns:0, reason:0
+08-30 15:52:25.359 14435 14435 I C04204/WMSScb: InitSSMProxy: proxy has been inited
+08-30 15:52:25.359 14435 14435 E C01406/RSNode: RSNode::RemoveModifier: modifier not exist, nodeId[61997852917789],modifiers num:[8]
+08-30 15:52:25.359 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:424, TTHNI:fId: 0{ T: Scroll, D: 9 };
+08-30 15:52:25.359 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:424, TTHRTI: T ClickRecognizer info: { T: Scroll };T PanRecognizer info: { T: Scroll };
+08-30 15:52:25.359 14435 14435 I C03914/AceTextField: [(100000:100000:scope)] Set caret position to 11
+08-30 15:52:25.359 14435 14435 I C03912/AceTextInput: [(100000:100000:scope)] after move, handleRect.GetX():403.619934,handleRect.GetY():58.368004
+08-30 15:52:25.359 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:424, last id:-1
+08-30 15:52:25.360 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:424,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:25.376 14435 14435 I C02805/InputKeyFlow: [P:U:425|247]ac: up: 425
+08-30 15:52:25.376 14435 14435 I C02805/InputKeyFlow: [P:U:425|649]recv
+08-30 15:52:25.376 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:5,InputId:425,wid:54,ac:4
+08-30 15:52:25.376 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:425, fId:0, T:1, I=0, M=0
+08-30 15:52:25.376 14435 14435 I C03934/AceUIEvent: [(100000:100000:scope)] TpFlush end by up event
+08-30 15:52:25.376 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Scroll
+08-30 15:52:25.376 14435 14435 I C0390b/AceScrollable: [(100000:100000:scope)] Scrollable GestureJudge:0, 0
+08-30 15:52:25.376 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click gesture judge reject
+08-30 15:52:25.376 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:425, last id:-1
+08-30 15:52:25.376 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:425,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:25.923 14435 14435 I C02805/InputKeyFlow: [P:D:426|247]ac: down: 426
+08-30 15:52:25.923 14435 14435 I C02805/InputKeyFlow: [P:D:426|649]recv
+08-30 15:52:25.923 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:6,InputId:426,wid:54,ac:2
+08-30 15:52:25.923 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:426, fId:0, T:0, I=0, M=0
+08-30 15:52:25.923 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:426, TTHNI:fId: 0{ T: Scroll, D: 9 };{ T: Button, D: 11 };
+08-30 15:52:25.923 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:426, TTHRTI: T ClickRecognizer info: { T: Scroll }; { T: Button };T PanRecognizer info: { T: Scroll };
+08-30 15:52:25.923 14435 14435 I C03945/AceStateStyle: [(100000:100000:scope)] Handle TouchDown event node: Button
+08-30 15:52:25.923 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:426, last id:-1
+08-30 15:52:25.923 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:426,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:25.940 14435 14435 I C02805/InputKeyFlow: [P:U:427|247]ac: up: 427
+08-30 15:52:25.940 14435 14435 I C02805/InputKeyFlow: [P:U:427|649]recv
+08-30 15:52:25.940 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:7,InputId:427,wid:54,ac:4
+08-30 15:52:25.940 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:427, fId:0, T:1, I=0, M=0
+08-30 15:52:25.940 14435 14435 I C03934/AceUIEvent: [(100000:100000:scope)] TpFlush end by up event
+08-30 15:52:25.940 14435 14435 I C03945/AceStateStyle: [(100000:100000:scope)] Handle TouchUp or Cancel event node: Button
+08-30 15:52:25.940 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Scroll
+08-30 15:52:25.940 14435 14435 I C0390b/AceScrollable: [(100000:100000:scope)] Scrollable GestureJudge:0, 0
+08-30 15:52:25.940 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click gesture judge reject
+08-30 15:52:25.940 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Button
+08-30 15:52:25.940 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] CLK RACC, T: Button
+08-30 15:52:25.942 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style 125829872 not contains toast_pattern!
+08-30 15:52:25.942 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style ohos_shadow_pattern not contains shadow_style_default_md_radius!
+08-30 15:52:25.942 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:427, last id:-1
+08-30 15:52:25.942 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:427,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:25.942 14435 14435 I C0390d/AceOverlay: [(100000:100000:scope)] Toast node mount to root node
+08-30 15:52:25.942 14435 14435 I C03900/Ace: [(100000:100000:scope)] Put node level order. nodeId: 69, levelOrder: 0.000000
+08-30 15:52:25.942 14435 14435 I C0390d/AceOverlay: [(100000:100000:scope)] open toast animation enter, containerId:100000
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style 125829872 not contains dialog_pattern!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern not contains shadow_dialog!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern not contains button_bottom_top_margin!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern not contains title_padding_horizontal!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern not contains title_text_font_weight!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern not contains dialog_button_border_radius!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern not contains dialog_content_top_padding!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern get attr dialog_padding_actions_left error!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern get attr dialog_padding_actions_top error!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern get attr dialog_padding_actions_right error!
+08-30 15:52:25.952 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style dialog_pattern get attr dialog_padding_actions_bottom error!
+08-30 15:52:27.142 14435 14435 I C02805/InputKeyFlow: [P:D:428|247]ac: down: 428
+08-30 15:52:27.142 14435 14435 I C02805/InputKeyFlow: [P:D:428|649]recv
+08-30 15:52:27.142 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:8,InputId:428,wid:54,ac:2
+08-30 15:52:27.142 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:428, fId:0, T:0, I=0, M=0
+08-30 15:52:27.142 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:428, TTHNI:fId: 0{ T: Scroll, D: 9 };
+08-30 15:52:27.142 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:428, TTHRTI: T ClickRecognizer info: { T: Scroll }; { T: Stack };T PanRecognizer info: { T: Scroll };
+08-30 15:52:27.142 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:428, last id:-1
+08-30 15:52:27.142 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:428,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:27.152 14435 14435 I C02805/InputKeyFlow: [P:U:429|247]ac: up: 429
+08-30 15:52:27.152 14435 14435 I C02805/InputKeyFlow: [P:U:429|649]recv
+08-30 15:52:27.152 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:9,InputId:429,wid:54,ac:4
+08-30 15:52:27.152 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:429, fId:0, T:1, I=0, M=0
+08-30 15:52:27.152 14435 14435 I C03934/AceUIEvent: [(100000:100000:scope)] TpFlush end by up event
+08-30 15:52:27.152 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Scroll
+08-30 15:52:27.152 14435 14435 I C0390b/AceScrollable: [(100000:100000:scope)] Scrollable GestureJudge:0, 0
+08-30 15:52:27.153 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click gesture judge reject
+08-30 15:52:27.153 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Stack
+08-30 15:52:27.153 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] CLK RACC, T: Stack
+08-30 15:52:27.153 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:429, last id:-1
+08-30 15:52:27.153 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:429,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:27.560 14435 14435 I C0390d/AceOverlay: [(100000:100000:scope)] pop toast enter
+08-30 15:52:27.560 14435 14435 I C03900/Ace: [(100000:100000:scope)] Pop node level order. nodeId: 69, levelOrder: 0.000000
+08-30 15:52:27.684 14435 14435 I C0390d/AceOverlay: [(100000:100000:scope)] toast remove from root
+08-30 15:52:27.943 14435 14435 I C02805/InputKeyFlow: [P:D:430|247]ac: down: 430
+08-30 15:52:27.943 14435 14435 I C02805/InputKeyFlow: [P:D:430|649]recv
+08-30 15:52:27.943 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:10,InputId:430,wid:54,ac:2
+08-30 15:52:27.944 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:430, fId:0, T:0, I=0, M=0
+08-30 15:52:27.944 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:430, TTHNI:fId: 0{ T: Scroll, D: 9 };{ T: Button, D: 11 };
+08-30 15:52:27.944 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:430, TTHRTI: T ClickRecognizer info: { T: Scroll }; { T: Button };T PanRecognizer info: { T: Scroll };
+08-30 15:52:27.944 14435 14435 I C03945/AceStateStyle: [(100000:100000:scope)] Handle TouchDown event node: Button
+08-30 15:52:27.944 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:430, last id:-1
+08-30 15:52:27.944 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:430,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:27.953 14435 14435 I C02805/InputKeyFlow: [P:U:431|247]ac: up: 431
+08-30 15:52:27.953 14435 14435 I C02805/InputKeyFlow: [P:U:431|649]recv
+08-30 15:52:27.953 14435 14435 I C04213/InputKeyFlow: HandleInputEvent: eid:11,InputId:431,wid:54,ac:4
+08-30 15:52:27.953 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] ITK Id:431, fId:0, T:1, I=0, M=0
+08-30 15:52:27.953 14435 14435 I C03934/AceUIEvent: [(100000:100000:scope)] TpFlush end by up event
+08-30 15:52:27.953 14435 14435 I C03945/AceStateStyle: [(100000:100000:scope)] Handle TouchUp or Cancel event node: Button
+08-30 15:52:27.953 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Scroll
+08-30 15:52:27.953 14435 14435 I C0390b/AceScrollable: [(100000:100000:scope)] Scrollable GestureJudge:0, 0
+08-30 15:52:27.953 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click gesture judge reject
+08-30 15:52:27.953 14435 14435 I C0391e/AceGesture: [(100000:100000:scope)] Click try accept Button
+08-30 15:52:27.953 14435 14435 I C03951/InputKeyFlow: [(100000:100000:scope)] CLK RACC, T: Button
+08-30 15:52:27.953 14435 14435 I C03919/AceInputTracking: [(100000:100000:scope)] Consumed id:431, last id:-1
+08-30 15:52:27.953 14435 14435 I C04213/InputKeyFlow: ConsumePointerEventInner: InputId:431,wid:54,pointId:0,srcType:2,rect:[0,0,1320,2856],notify:1
+08-30 15:52:27.977 14435 14435 I C01406/OHOS::RS: [RenderAnimation] Id: 61997852917805 SetExpectedFrameRateRange{15, 60, 30}
+08-30 15:52:27.977 14435 14435 I C01406/OHOS::RS: [RenderAnimation] Id: 61997852917806 SetExpectedFrameRateRange{15, 60, 30}
+08-30 15:52:27.977 14435 14435 I C01406/OHOS::RS: [RenderAnimation] Id: 61997852917807 SetExpectedFrameRateRange{15, 60, 30}
+08-30 15:52:27.977 14435 14435 I C01406/OHOS::RS: [RenderAnimation] Id: 61997852917808 SetExpectedFrameRateRange{15, 60, 30}
+08-30 15:52:28.205 14435 14435 I C0390d/AceOverlay: [(100000:100000:scope)] Toast node mount to root node
+08-30 15:52:28.205 14435 14435 I C03900/Ace: [(100000:100000:scope)] Put node level order. nodeId: 73, levelOrder: 0.000000
+08-30 15:52:28.205 14435 14435 I C0390d/AceOverlay: [(100000:100000:scope)] open toast animation enter, containerId:100000
+08-30 15:52:28.225 14435 14435 E C02c03/PARAM_WATCHER: Read result failed, code is: 1.
+08-30 15:52:28.225 14435 14435 E C02c03/PARAM_WATCHER: Failed to add watcher for persist.rosen.animationtrace.enabled
+08-30 15:52:28.225 14435 14435 I C02c03/PARAM_WATCHER: [watcher_manager_kits.cpp:241]ParamWatcher destructor start
+08-30 15:52:28.225 14435 14435 E C02c03/PARAM_WATCHER: SystemWatchParameter is failed!keyPrefix is:persist.rosen.animationtrace.enabled,errNum is:-1
+08-30 15:52:28.225 14435 14435 E C02c0b/BEGET: [service_watcher.c:85]WatchParameter failed! the errNum is -1
+08-30 15:52:28.225 14435 14435 E C02c03/PARAM_WATCHER: Failed to add callback for sys.graphic.openTestModeTrace
+08-30 15:52:28.225 14435 14435 E C02c03/PARAM_WATCHER: SystemWatchParameter is failed!keyPrefix is:sys.graphic.openTestModeTrace,errNum is:110
+08-30 15:52:28.225 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] sync with js stack, id: , UINodeId: 5, preStackSize: 1, newStackSize: 1
+08-30 15:52:28.225 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] find in nowhere, navigation stack create new node, index: 0, removeSize: 0, name: Tabs.
+08-30 15:52:28.225 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] render current custom node: TabsPage
+08-30 15:52:28.226 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] load destination by buildermap
+08-30 15:52:28.226 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] Tabs lifecycle change to onWillAppear state. navdestinationId:76, navigationId:5
+08-30 15:52:28.226 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] last standard page index is 0
+08-30 15:52:28.226 14435 14435 W C03922/AceNavigation: [(100000:100000:scope)] current navDestination(index: 0)'s param can't be serialized or is empty!
+08-30 15:52:28.226 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] mountToParent navdestinationId:76, slot:0
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style 125829872 not contains tab_pattern!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style tab_pattern not contains default_tab_bar_name!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style tab_pattern get attr dialog_radius_level10 error!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style tab_pattern get attr dialog_icon_primary error!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style tab_pattern get attr dialog_font_primary error!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style 125829872 not contains swiper_pattern!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style swiper_pattern get attr swiper_focus_style_type error!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style swiper_pattern not contains swiper_indicator_dot_item_space!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style swiper_pattern not contains swiper_indicator_drag_min_angle!
+08-30 15:52:28.226 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style swiper_pattern not contains swiper_indicator_drag_max_angle!
+08-30 15:52:28.227 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] Tabs lifecycle change to onAppear state. navdestinationId:76, navigationId:5
+08-30 15:52:28.227 14435 14435 W C03926/AceTheme: [(100000:100000:scope)] style 125829872 not contains focus_animation_pattern!
+08-30 15:52:28.227 14435 14435 I C03953/AceSelectOverlay: [(100000:100000:scope)] isDestroyed:0,isClosed:0
+08-30 15:52:28.227 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] view: NavDestination/76 show
+08-30 15:52:28.227 14435 14435 I C0391c/AceFocus: [(100000:100000:scope)] View: NavDestination/16 lost focus
+08-30 15:52:28.227 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] transition start, disableAllAnimation: 0, animated: 1, isPopPage: 1, isDialog: 0, isReplace: 1, isCustomAnimation: 0
+08-30 15:52:28.227 14435 14435 I C03922/AceNavigation: [(100000:100000:scope)] Login lifecycle change to onWillHide state. navdestinationId:16, navigationId:5
+08-30 15:52:28.227 14435 14435 I C03932/AceAutoFill: [(100000:100000:scope)] RequestAutoSave called
+08-30 15:52:28.227 14435 14435 I C03932/AceAutoFill: [(100000:100000:scope)] bundleName=[<private>], moduleName=[<private>], abilityName=[<private>]
+08-30 15:52:28.227 14435 14435 I C01351/AutoFillMgr: [auto_fill_manager.cpp77]RequestAutoSave
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] [@145][ID: 1] The modal UIExtension is created.
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] Create UIExtensionNode
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] [@1080][ID: 1] RegisterPipelineEvent
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] [@1032][ID: 1] OnAttachToFrameNode
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] [@549][ID: 1] The current state is 'NONE' when UpdateWant, needCheck: '0'.
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] [@576][ID: 1] The ability KeyAsync 0, uIExtensionUsage: 0.
+08-30 15:52:28.227 14435 14435 I C0392a/AceUiExtensionComponent: [(100000:100000:scope)] [@656][ID: 1] The session is created with bundle=, ability=, componentId=114, sessionType=1.
+08-30 15:52:28.227 14435 14435 I C04217/WMSAttribute: GetExtensionConfig: waterfall: 0, winId: 54

@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "沈大社区主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "沈阳大学校园社区"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "沈大社区"
+    }
+  ]
+}
