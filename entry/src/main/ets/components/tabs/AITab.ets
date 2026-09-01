@@ -98,7 +98,8 @@ export struct AITab {
                   this.navStack.pushPath({ name: 'AIChat', param: param });
                 })
               }
-            }, (item: AIConversation) => `${item.id}`)
+            // 键值带上标题与消息数：否则 AI 会话条目复用旧数据，消息条数不刷新。
+            }, (item: AIConversation) => `${item.id}:${item.title}:${item.messages.length}`)
 
             if (this.conversations.length === 0) {
               ListItem() {

@@ -40,20 +40,27 @@ export class NotificationSync {
       return;
     }
     NotificationSync.syncing = true;
+    let changed = false;
     try {
       const response = await Api.notifications();
       let latestId = 0;
       response.items.forEach((item: AppNotification) => {
         latestId = Math.max(latestId, item.id);
       });
-      if (AppState.syncNotificationSummary(response.unread, latestId)) {
-        AppState.publishMessageChange();
-      }
+      changed = AppState.syncNotificationSummary(response.unread, latestId) || changed;
     } catch (e) {
       // 网络异常时保留现有未读状态，下一个轮询周期自动重试；保留日志便于联调定位
       hilog.error(DOMAIN, TAG, `syncNow failed: ${(e as Error).message}`);
-    } finally {
-      NotificationSync.syncing = false;
     }
+    try {
+      const response = await Api.listDirectConversations();
+      changed = AppState.syncDirectConversations(response.items, response.unread) || changed;
+    } catch (e) {
+      hilog.error(DOMAIN, TAG, `sync direct messages failed: ${(e as Error).message}`);
+    }
+    if (changed) {
+      AppState.publishMessageChange();
+    }
+    NotificationSync.syncing = false;
   }
 }

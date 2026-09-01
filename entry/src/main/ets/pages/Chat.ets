@@ -25,10 +25,17 @@ export struct ChatPage {
   @State sending: boolean = false;
   /** 内置招呼用语：与 Web 端一致，取自服务端公共设置，失败时用兜底文案。 */
   @State greeting: string = '你好，我想和你聊聊';
+  /** 前台消息变更信号：NotificationSync 轮询发现新私信时递增，驱动本页原地刷新。 */
+  @StorageLink('xsnbb_message_revision') @Watch('onMessageRevisionChange') messageRevision: number = 0;
   private scroller: Scroller = new Scroller();
 
   aboutToAppear(): void {
     this.load();
+  }
+
+  aboutToDisappear(): void {
+    // 返回消息页、侧滑返回或切入其他页面时都强制补拉会话摘要。
+    AppState.requestMessageRefresh();
   }
 
   private toast(message: string): void {
@@ -56,7 +63,7 @@ export struct ChatPage {
       this.scrollToBottom();
       // 进入会话即持久化已读：服务端把对方消息置为 read 并返回全量私信未读数，
       // 底栏冒泡与消息页未读随下次拉取保持清除，不再回弹。
-      Api.markDirectConversationRead(this.conversationId).catch((e: Error) => {
+      await Api.markDirectConversationRead(this.conversationId).catch((e: Error) => {
         hilog.error(DOMAIN, TAG, `markConversationRead failed: ${e.message}`);
       });
     } catch (e) {
@@ -69,6 +76,43 @@ export struct ChatPage {
     setTimeout(() => {
       this.scroller.scrollEdge(Edge.Bottom);
     }, 80);
+  }
+
+  /**
+   * 收到全局消息变更信号后原地刷新当前会话，不用返回消息页再进入。
+   * 自己发送 / 已读协议也会触发该信号，刷新是幂等的；仅在有新的对方未读消息时
+   * 才调用已读协议，避免「已读 → 发布信号 → 再刷新」的自我循环。
+   */
+  private onMessageRevisionChange(): void {
+    if (!this.loading) {
+      this.refreshConversation();
+    }
+  }
+
+  private async refreshConversation(): Promise<void> {
+    try {
+      const previousLastId =
+        this.messages.length > 0 ? this.messages[this.messages.length - 1].id : 0;
+      const resp = await Api.getDirectConversation(this.conversationId);
+      this.messages = resp.conversation.messages;
+      this.unlocked = resp.unlocked;
+      const currentLastId =
+        this.messages.length > 0 ? this.messages[this.messages.length - 1].id : 0;
+      if (currentLastId !== previousLastId) {
+        this.scrollToBottom();
+      }
+      const myId = Session.currentAccount()?.id ?? -1;
+      const hasUnreadIncoming = this.messages.some(
+        (message: DirectMessage) => message.sender_id !== myId && message.status === 'delivered');
+      if (hasUnreadIncoming) {
+        // 正在会话内收到的对方消息立即已读：服务端持久化，底栏与消息页冒泡不回弹。
+        await Api.markDirectConversationRead(this.conversationId).catch((e: Error) => {
+          hilog.error(DOMAIN, TAG, `refresh markConversationRead failed: ${e.message}`);
+        });
+      }
+    } catch (e) {
+      hilog.error(DOMAIN, TAG, `refresh conversation failed: ${(e as Error).message}`);
+    }
   }
 
   private async send(text: string, system: boolean): Promise<void> {

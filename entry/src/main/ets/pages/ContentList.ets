@@ -104,7 +104,10 @@ export struct ContentListPage {
                     }
                   })
                 }
-              }, (post: Post) => `${post.id}`)
+              // 键值必须包含驱动卡片渲染的字段：仅用帖子 id 时 ArkUI 复用旧组件，
+              // 点赞/收藏/评论数变化不会刷新（与消息页未读冒泡同一类问题）。
+              }, (post: Post) => `${post.id}:${post.likes}:${post.comments}:${post.bookmarks}:` +
+                `${post.liked ? 1 : 0}:${post.bookmarked ? 1 : 0}:${post.pinned ? 1 : 0}`)
               if (this.items.length === 0) {
                 ListItem() {
                   EmptyState({

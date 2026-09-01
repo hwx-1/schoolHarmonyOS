@@ -201,7 +201,10 @@ export struct SearchPage {
                   }
                 })
               }
-            }, (post: Post) => `${post.id}`)
+            // 键值必须包含驱动卡片渲染的字段：否则点赞/收藏后 patchPost 拿到新数据，
+            // ArkUI 仍复用旧组件，操作栏数字与高亮不刷新。
+            }, (post: Post) => `${post.id}:${post.likes}:${post.comments}:${post.bookmarks}:` +
+              `${post.liked ? 1 : 0}:${post.bookmarked ? 1 : 0}:${post.pinned ? 1 : 0}`)
           }
           .width('100%')
           .padding({ left: 12, right: 12 })

@@ -10,7 +10,7 @@ Stage 模型（UIAbility），compatibleSdkVersion 5.0.0(12)，与仓库内 Go A
 - 帖子详情：九宫格图片、标签、点赞 / 收藏、评论列表与发表评论（含内容审核拦截提示）
 - 发布动态：文字 + 最多 9 张相册图片（复制进缓存目录后 multipart 上传）+ 最多 3 个话题标签
 - 搜索（关键词 / 话题标签）、校园公告（展开全文）、校园百宝箱（openLink 打开外链）
-- 消息：系统通知（未读数 / 一键已读）、私信会话列表与聊天（含「自由聊」状态）
+- 消息：系统通知（未读数 / 一键已读）、私信会话列表与聊天（含「自由聊」状态、前台实时接收新消息）
 - AI 校园助手：会话列表、剩余次数、新建会话、问答（含知识库来源标注）
 - 我的：资料卡与完整度、编辑资料、学生认证（材料上传）、修改密码、注销账号、退出登录
 
@@ -24,6 +24,12 @@ Stage 模型（UIAbility），compatibleSdkVersion 5.0.0(12)，与仓库内 Go A
 - **反馈**：Toast / 对话框统一走 `UIContext.getPromptAction()`（showToast / showDialog），
   未使用废弃的全局 `promptAction` / `AlertDialog`
 - **不可变状态更新**：`@State` 数组 / 对象一律整体替换，不原地修改嵌套字段
+- **ForEach 键值必须包含驱动渲染的字段**：ArkUI 在键值不变时复用子组件、不重新执行
+  itemGenerator，`@Prop` 与内联闭包会一直持有首次构建的旧对象。列表项内容可变
+  （未读数、点赞数、已读态、消息预览、回复数等）时，键值必须把这些字段拼进去，
+  例如 `(item) => \`${item.id}:${item.unread_count}\``；仅当条目内容永不变化
+  （公告、百宝箱等静态配置）或纯追加且新条目必有新 id（聊天消息）时才允许只用 id。
+  反例：2026-09 消息页键值只用会话 id，导致已读后未读冒泡不消失、新消息预览不刷新
 - **鉴权**：服务端为 Cookie 会话；`service/Http.ets` 内置 CookieJar，
   自动捕获 Set-Cookie、携带 Cookie，非 GET 请求自动附加 `X-CSRF-Token`
 - **长列表**：首页信息流使用 `LazyForEach + BasicDataSource` 按需加载与刷新

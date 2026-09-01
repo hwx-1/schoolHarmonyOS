@@ -32,6 +32,8 @@ export struct MessagesTab {
   @State conversations: DirectConversationItem[] = [];
   /** 最新一条互动通知标题，作为入口卡片预览文案。 */
   @State latestNotice: string = '';
+  /** 只允许最后一次刷新写入页面，避免旧请求晚返回覆盖新消息。 */
+  private loadGeneration: number = 0;
 
   aboutToAppear(): void {
     this.loadAll();
@@ -39,11 +41,27 @@ export struct MessagesTab {
 
   private onMessageRevisionChange(): void {
     if (!this.loading) {
+      // 后台同步或发送响应已经带回完整快照时先同步更新卡片，再做网络校准。
+      if (AppState.hasDirectSnapshot()) {
+        this.conversations = AppState.directConversationSnapshot();
+      }
       this.loadAll();
     }
   }
 
   private async loadAll(): Promise<void> {
+    const generation = ++this.loadGeneration;
+    // 私信卡片优先刷新，避免通知接口延迟阻塞消息预览与未读状态。
+    try {
+      const convResp = await Api.listDirectConversations();
+      if (generation === this.loadGeneration) {
+        this.conversations = convResp.items;
+        AppState.syncDirectConversations(convResp.items, convResp.unread);
+      }
+    } catch (e) {
+      // 会话加载失败保留现有列表；保留日志便于联调定位
+      hilog.error(DOMAIN, TAG, `loadAll conversations failed: ${(e as Error).message}`);
+    }
     try {
       const resp = await Api.notifications();
       let latestId = 0;
@@ -56,43 +74,18 @@ export struct MessagesTab {
           latestTitle = item.title;
         }
       });
-      this.latestNotice = latestTitle;
-      AppState.syncNotificationSummary(resp.unread, latestId);
+      if (generation === this.loadGeneration) {
+        this.latestNotice = latestTitle;
+        AppState.syncNotificationSummary(resp.unread, latestId);
+      }
     } catch (e) {
       // 通知摘要加载失败保留现有状态；保留日志便于联调定位
       hilog.error(DOMAIN, TAG, `loadAll notifications failed: ${(e as Error).message}`);
     }
-    try {
-      const convResp = await Api.listDirectConversations();
-      this.conversations = convResp.items;
-      AppState.setDirectUnreadCount(this.unreadDirectCount());
-    } catch (e) {
-      // 会话加载失败保留现有列表；保留日志便于联调定位
-      hilog.error(DOMAIN, TAG, `loadAll conversations failed: ${(e as Error).message}`);
+    if (generation === this.loadGeneration) {
+      this.loading = false;
+      this.refreshing = false;
     }
-    this.loading = false;
-    this.refreshing = false;
-  }
-
-  /** 私信未读数：所有会话中对方发来且状态不是已读的消息总数。 */
-  private unreadDirectCount(): number {
-    let count = 0;
-    this.conversations.forEach((conversation: DirectConversationItem) => {
-      count += this.unreadOfConversation(conversation);
-    });
-    return count;
-  }
-
-  /** 单个会话的未读数：对方发来且状态不是已读的消息条数（作为原始类型传给卡片，保证随状态刷新）。 */
-  private unreadOfConversation(conversation: DirectConversationItem): number {
-    const myId = Session.currentAccount()?.id ?? -1;
-    let count = 0;
-    conversation.messages.forEach((message: DirectMessage) => {
-      if (message.sender_id !== myId && message.status !== 'read') {
-        count++;
-      }
-    });
-    return count;
   }
 
   /** 进入会话后本地立即把对方消息置为已读，未读数冒泡即时消失；服务端状态由聊天页已读协议持久化。 */
@@ -107,8 +100,9 @@ export struct MessagesTab {
         other: conversation.other,
         unlocked: conversation.unlocked,
         updated_at: conversation.updated_at,
+        unread_count: 0,
         messages: conversation.messages.map((message: DirectMessage) => {
-          if (message.sender_id === myId || message.status === 'read') {
+          if (message.sender_id === myId || message.status !== 'delivered') {
             return message;
           }
           const messageCopy: DirectMessage = {
@@ -125,7 +119,11 @@ export struct MessagesTab {
       return copy;
     });
     // 底栏冒泡立即更新，不等待下次拉取
-    AppState.setDirectUnreadCount(this.unreadDirectCount());
+    let unread = 0;
+    this.conversations.forEach((conversation: DirectConversationItem) => {
+      unread += conversation.unread_count;
+    });
+    AppState.setDirectUnreadCount(unread);
   }
 
   build() {
@@ -153,7 +151,6 @@ export struct MessagesTab {
                 ListItem() {
                   ConversationItemView({
                     conversation: item,
-                    unread: this.unreadOfConversation(item),
                     onOpen: (target: DirectConversationItem) => {
                       this.markConversationMessagesRead(target.id);
                       const param: ChatParam = { id: target.id, name: target.other.nickname };
@@ -161,7 +158,10 @@ export struct MessagesTab {
                     }
                   })
                 }
-              }, (item: DirectConversationItem) => `${item.id}`)
+              // 键值必须包含驱动卡片渲染的字段：仅用会话 id 时 ArkUI 复用旧组件，
+              // @Prop 不会随新数据刷新，未读数/预览/时间会冻结在首次构建的状态。
+              }, (item: DirectConversationItem) =>
+                `${item.id}:${item.unread_count}:${item.updated_at}:${item.messages.length}`)
             }
 
             if (this.conversations.length === 0 && this.latestNotice.length === 0) {

@@ -21,6 +21,7 @@ import {
   CreatePostBody,
   CreatePostResp,
   DirectConversationItem,
+  DirectConversationsResp,
   DirectConversationResp,
   ItemsResp,
   LoginBody,
@@ -174,7 +175,7 @@ export class Api {
   }
 
   // ---- 私信 ----
-  static listDirectConversations(): Promise<ItemsResp<DirectConversationItem>> {
+  static listDirectConversations(): Promise<DirectConversationsResp> {
     return request(http.RequestMethod.GET, '/api/v1/direct-conversations');
   }
 
@@ -187,6 +188,7 @@ export class Api {
     const body: SendDirectMessageBody = { text, system };
     const response = await request<SendDirectMessageResp>(
       http.RequestMethod.POST, `/api/v1/direct-conversations/${id}/messages`, body);
+    AppState.appendDirectMessage(id, response.message, response.unlocked);
     AppState.publishMessageChange();
     return response;
   }
@@ -203,7 +205,7 @@ export class Api {
   static async markDirectConversationRead(id: number): Promise<UnreadResp> {
     const response = await request<UnreadResp>(
       http.RequestMethod.POST, `/api/v1/direct-conversations/${id}/read`);
-    AppState.setDirectUnreadCount(response.unread);
+    AppState.markDirectConversationRead(id, response.unread);
     AppState.publishMessageChange();
     return response;
   }

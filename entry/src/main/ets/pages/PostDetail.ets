@@ -402,7 +402,7 @@ export struct PostDetailPage {
                               replyToName: this.replyTargetName(reply),
                               onReply: (target: CommentItem) => this.startReply(target)
                             })
-                          }, (reply: CommentItem) => `${reply.id}`)
+                          }, (reply: CommentItem) => `${reply.id}:${reply.deleted ? 1 : 0}`)
                           if (this.repliesOf(root.id).length > 2) {
                             Text(this.expandedRoots.indexOf(root.id) >= 0
                               ? '收起回复 ∧'
@@ -422,7 +422,8 @@ export struct PostDetailPage {
                     }
                     .width('100%')
                     .alignItems(HorizontalAlign.Start)
-                  }, (root: CommentItem) => `${root.id}`)
+                  // 键值带上删除态与回复数：否则审核删除或新回复到达时条目复用旧数据不刷新。
+                  }, (root: CommentItem) => `${root.id}:${root.deleted ? 1 : 0}:${this.repliesOf(root.id).length}`)
                 }
               }
               .width('100%')

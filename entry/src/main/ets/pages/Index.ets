@@ -56,6 +56,12 @@ export struct TabsPage {
       // 未读数刷新失败不阻塞主界面，但保留日志便于联调定位
       hilog.error(DOMAIN, TAG, `refreshUnread failed: ${(e as Error).message}`);
     }
+    try {
+      const response = await Api.listDirectConversations();
+      AppState.setDirectUnreadCount(response.unread);
+    } catch (e) {
+      hilog.error(DOMAIN, TAG, `refresh direct unread failed: ${(e as Error).message}`);
+    }
   }
 
   build() {

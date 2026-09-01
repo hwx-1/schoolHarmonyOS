@@ -20,6 +20,7 @@ import {
   CreatePostBody,
   CreatePostResp,
   DirectConversationItem,
+  DirectConversationsResp,
   DirectConversationResp,
   DirectMessage,
   ItemsResp,
@@ -286,7 +287,7 @@ let directConversations: DirectConversationItem[] = [
         sender_id: 2,
         text: '同学你好，高数书还在吗？',
         system: false,
-        status: 'sent',
+        status: 'delivered',
         created_at: '2026-08-30T10:00:00+08:00',
       },
       {
@@ -294,11 +295,12 @@ let directConversations: DirectConversationItem[] = [
         sender_id: 1,
         text: '在的，今晚七点图书馆门口可以给你',
         system: false,
-        status: 'sent',
+        status: 'delivered',
         created_at: '2026-08-30T10:05:00+08:00',
       },
     ],
     updated_at: '2026-08-30T10:05:00+08:00',
+    unread_count: 1,
   },
   {
     id: 2,
@@ -310,11 +312,12 @@ let directConversations: DirectConversationItem[] = [
         sender_id: 3,
         text: '香锅真的假的，明天我也去试试',
         system: false,
-        status: 'sent',
+        status: 'delivered',
         created_at: '2026-08-29T19:00:00+08:00',
       },
     ],
     updated_at: '2026-08-29T19:00:00+08:00',
+    unread_count: 1,
   },
 ];
 
@@ -604,7 +607,11 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
 
   // ---- 私信 ----
   if (clean === '/api/v1/direct-conversations' && method === http.RequestMethod.GET) {
-    const resp: ItemsResp<DirectConversationItem> = { items: directConversations };
+    let unread = 0;
+    directConversations.forEach((item: DirectConversationItem) => {
+      unread += item.unread_count;
+    });
+    const resp: DirectConversationsResp = { items: directConversations, unread: unread };
     return resp as T;
   }
   if (segments.length === 4 && segments[2] === 'direct-conversations'
@@ -623,7 +630,12 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
       created_at: '2026-08-01T10:00:00+08:00',
     };
     const resp: DirectConversationResp = {
-      conversation: { id: found.id, messages: found.messages },
+      conversation: {
+        id: found.id,
+        messages: found.messages,
+        updated_at: found.updated_at,
+        unread_count: found.unread_count,
+      },
       other: other,
       unlocked: found.unlocked,
     };
@@ -637,8 +649,8 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
       id: nextMessageId++,
       sender_id: MOCK_ACCOUNT.id,
       text: input.text,
-      system: false,
-      status: 'sent',
+      system: input.system,
+      status: 'delivered',
       created_at: nowIso(),
     };
     const found = directConversations.find((item: DirectConversationItem) => item.id === id);
@@ -647,6 +659,34 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
       found.updated_at = message.created_at;
     }
     const resp: SendDirectMessageResp = { message: message, unlocked: true };
+    return resp as T;
+  }
+  if (segments.length === 5 && segments[2] === 'direct-conversations' && segments[4] === 'read'
+    && method === http.RequestMethod.POST) {
+    const id = Number(segments[3]);
+    const found = directConversations.find((item: DirectConversationItem) => item.id === id);
+    if (found) {
+      found.messages = found.messages.map((message: DirectMessage) => {
+        if (message.sender_id !== MOCK_ACCOUNT.id && message.status === 'delivered') {
+          const readMessage: DirectMessage = {
+            id: message.id,
+            sender_id: message.sender_id,
+            text: message.text,
+            system: message.system,
+            status: 'read',
+            created_at: message.created_at,
+          };
+          return readMessage;
+        }
+        return message;
+      });
+      found.unread_count = 0;
+    }
+    let unread = 0;
+    directConversations.forEach((item: DirectConversationItem) => {
+      unread += item.unread_count;
+    });
+    const resp: UnreadResp = { unread: unread };
     return resp as T;
   }
 

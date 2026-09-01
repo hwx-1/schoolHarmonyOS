@@ -153,7 +153,8 @@ export struct NotificationsPage {
                     onOpen: (target: AppNotification) => this.openNotification(target)
                   })
                 }
-              }, (item: AppNotification) => `${item.id}`)
+              // 键值带上已读态：否则已读后组件复用旧 @Prop，卡片仍显示未读样式。
+              }, (item: AppNotification) => `${item.id}:${item.read ? 1 : 0}`)
 
               if (this.notifications.length === 0) {
                 ListItem() {

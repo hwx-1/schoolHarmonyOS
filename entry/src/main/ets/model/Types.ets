@@ -100,6 +100,12 @@ export interface DirectConversationItem {
   unlocked: boolean;
   messages: DirectMessage[];
   updated_at: string;
+  unread_count: number;
+}
+
+export interface DirectConversationsResp {
+  items: DirectConversationItem[];
+  unread: number;
 }
 
 export interface PublicSettings {
@@ -298,6 +304,8 @@ export interface DirectConversationResp {
 export interface DirectConversationDetail {
   id: number;
   messages: DirectMessage[];
+  updated_at: string;
+  unread_count: number;
 }
 
 export interface SendDirectMessageResp {

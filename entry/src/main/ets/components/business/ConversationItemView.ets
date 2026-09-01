@@ -2,15 +2,15 @@ import { DirectConversationItem } from '../../model/Types';
 import { TimeUtil } from '../../utils/TimeUtil';
 import { AppColors } from '../../constants/AppConfig';
 import { AvatarView } from '../common/AvatarView';
+import { Session } from '../../service/Session';
 
 /**
  * 私信会话条目：对方头像、昵称、最近一条消息；
- * 未读数冒泡位于卡片右侧、时间下方（未读数由父组件计算后以原始类型传入，保证随状态刷新）。
+ * 未读数冒泡位于卡片右侧、时间下方，直接读取服务端会话快照的 unread_count。
  */
 @Component
 export struct ConversationItemView {
   @Prop conversation: DirectConversationItem;
-  @Prop unread: number = 0;
   onOpen: (conversation: DirectConversationItem) => void = () => {};
 
   private lastMessage(): string {
@@ -19,7 +19,9 @@ export struct ConversationItemView {
       return '开始聊天吧';
     }
     const last = messages[messages.length - 1];
-    return last.system ? '[系统招呼]' : last.text;
+    const mine = last.sender_id === (Session.currentAccount()?.id ?? -1);
+    const text = last.system ? '[系统招呼]' : last.text;
+    return mine ? `我：${text}` : text;
   }
 
   build() {
@@ -63,8 +65,8 @@ export struct ConversationItemView {
         Text(TimeUtil.format(this.conversation.updated_at))
           .fontSize(11)
           .fontColor(AppColors.TEXT_SECONDARY)
-        if (this.unread > 0) {
-          Text(this.unread > 99 ? '99+' : `${this.unread}`)
+        if (this.conversation.unread_count > 0) {
+          Text(this.conversation.unread_count > 99 ? '99+' : `${this.conversation.unread_count}`)
             .fontSize(10)
             .fontWeight(FontWeight.Medium)
             .fontColor(Color.White)

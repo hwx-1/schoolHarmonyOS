@@ -189,7 +189,8 @@ export struct HomeTab {
   }
 
   private postRenderKey(post: Post): string {
-    return `${post.id}_${post.likes}_${post.comments}_${post.liked ? 1 : 0}_${post.bookmarked ? 1 : 0}`;
+    return `${post.id}_${post.likes}_${post.comments}_${post.bookmarks}` +
+      `_${post.liked ? 1 : 0}_${post.bookmarked ? 1 : 0}_${post.pinned ? 1 : 0}`;
   }
 
   private openSearch(tag: string): void {
