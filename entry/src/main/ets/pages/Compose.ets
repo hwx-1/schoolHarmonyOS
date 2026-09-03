@@ -1,7 +1,7 @@
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { fileIo } from '@kit.CoreFileKit';
 import { Api } from '../service/Api';
-import { ApiError, uploadFile } from '../service/Http';
+import { ApiError, absoluteMediaUrl, uploadFile } from '../service/Http';
 import { AppColors, AppConfig } from '../constants/AppConfig';
 import { CreatePostBody } from '../model/Types';
 import { NavBar } from '../components/common/NavBar';
@@ -16,11 +16,40 @@ interface PendingImage {
 @Component
 export struct ComposePage {
   @Consume('navStack') navStack: NavPathStack;
+  @Prop postId: number = 0;
   @State text: string = '';
   @State tagInput: string = '';
   @State tags: string[] = [];
   @State images: PendingImage[] = [];
   @State publishing: boolean = false;
+  @State loading: boolean = false;
+
+  aboutToAppear(): void {
+    if (this.postId > 0) {
+      this.loadPost();
+    }
+  }
+
+  private async loadPost(): Promise<void> {
+    this.loading = true;
+    try {
+      const resp = await Api.getPost(this.postId);
+      this.text = resp.post.text;
+      this.tags = resp.post.tags ?? [];
+      this.images = (resp.post.images ?? []).map((url: string) => {
+        const image: PendingImage = { localPath: absoluteMediaUrl(url), remoteUrl: url, uploading: false };
+        return image;
+      });
+    } catch (err) {
+      this.toast(err instanceof ApiError ? err.message : '帖子加载失败');
+    }
+    this.loading = false;
+  }
+
+  private imageSource(image: PendingImage): string {
+    return image.remoteUrl.length > 0 && image.localPath.startsWith('http')
+      ? image.localPath : `file://${image.localPath}`;
+  }
 
   private canPublish(): boolean {
     return this.text.trim().length > 0
@@ -125,12 +154,18 @@ export struct ComposePage {
         images: this.images.map((img: PendingImage) => img.remoteUrl),
         tags: this.tags,
       };
-      const resp = await Api.createPost(body);
-      if (!resp.moderation.pass) {
-        this.toast(resp.message || '内容未通过审核，请修改后重试');
-      } else {
-        this.toast(resp.message || '发布成功');
+      if (this.postId > 0) {
+        const resp = await Api.updatePost(this.postId, body);
+        this.toast(resp.message || '修改稿已提交审核');
         this.navStack.pop();
+      } else {
+        const resp = await Api.createPost(body);
+        if (!resp.moderation.pass) {
+          this.toast(resp.message || '内容未通过审核，请修改后重试');
+        } else {
+          this.toast(resp.message || '发布成功');
+          this.navStack.pop();
+        }
       }
     } catch (err) {
       this.toast(err instanceof ApiError ? err.message : '发布失败，请稍后重试');
@@ -143,13 +178,13 @@ export struct ComposePage {
     NavDestination() {
       Column() {
         NavBar({
-          title: '发布动态',
+          title: this.postId > 0 ? '编辑帖子' : '发布动态',
           showBack: false,
           leftText: '取消',
           onLeft: () => {
             this.navStack.pop();
           },
-          rightText: this.publishing ? '发布中…' : '发布',
+          rightText: this.publishing ? '提交中…' : (this.postId > 0 ? '提交修改' : '发布'),
           rightEnabled: this.canPublish(),
           onRight: () => {
             this.publish();
@@ -170,7 +205,7 @@ export struct ComposePage {
               ForEach(this.images, (img: PendingImage, index: number) => {
                 Stack({ alignContent: Alignment.TopEnd }) {
                   Stack() {
-                    Image(`file://${img.localPath}`)
+                    Image(this.imageSource(img))
                       .width(100)
                       .height(100)
                       .objectFit(ImageFit.Cover)

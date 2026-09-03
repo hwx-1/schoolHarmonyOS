@@ -1,7 +1,9 @@
 import { common } from '@kit.AbilityKit';
 import { Api } from '../../service/Api';
 import { ApiError } from '../../service/Http';
-import { Announcement, CampusTool, Post, PostDetailParam, PublicSettings, SearchParam } from '../../model/Types';
+import {
+  Announcement, CampusTool, Post, PostDetailParam, PublicProfileParam, PublicSettings, SearchParam
+} from '../../model/Types';
 import { AppColors } from '../../constants/AppConfig';
 import { PostCard } from '../business/PostCard';
 import { LoadingView } from '../common/LoadingView';
@@ -408,6 +410,10 @@ export struct HomeTab {
                   onOpen: (target: Post) => {
                     const param: PostDetailParam = { id: target.id };
                     this.navStack.pushPath({ name: 'PostDetail', param: param });
+                  },
+                  onAuthor: (target: Post) => {
+                    const param: PublicProfileParam = { id: target.author.id };
+                    this.navStack.pushPath({ name: 'PublicProfile', param: param });
                   },
                   onLike: (target: Post) => {
                     this.handleLike(target);

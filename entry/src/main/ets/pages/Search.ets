@@ -1,6 +1,6 @@
 import { Api } from '../service/Api';
 import { ApiError } from '../service/Http';
-import { Post, PublicSettings, PostDetailParam } from '../model/Types';
+import { Post, PublicProfileParam, PublicSettings, PostDetailParam } from '../model/Types';
 import { AppColors } from '../constants/AppConfig';
 import { PostCard } from '../components/business/PostCard';
 import { LoadingView } from '../components/common/LoadingView';
@@ -184,6 +184,10 @@ export struct SearchPage {
                   onOpen: (target: Post) => {
                     const param: PostDetailParam = { id: target.id };
                     this.navStack.pushPath({ name: 'PostDetail', param: param });
+                  },
+                  onAuthor: (target: Post) => {
+                    const param: PublicProfileParam = { id: target.author.id };
+                    this.navStack.pushPath({ name: 'PublicProfile', param: param });
                   },
                   onLike: (target: Post) => {
                     Api.likePost(target.id)

@@ -2,12 +2,16 @@ import { http } from '@kit.NetworkKit';
 import {
   Account,
   AccountResp,
+  Appeal,
+  AIFeedbackBody,
+  AIFeedbackResp,
   AIConversation,
   AIConversationResp,
   AIConversationsResp,
   AIMessage,
   AIModel,
   Announcement,
+  AnnouncementResp,
   AppNotification,
   AskAIBody,
   AskAIResp,
@@ -17,6 +21,7 @@ import {
   CommentsResp,
   CreateCommentBody,
   CreateCommentResp,
+  CreateAppealBody,
   CreatePostBody,
   CreatePostResp,
   DirectConversationItem,
@@ -27,17 +32,23 @@ import {
   MarkNotificationsReadBody,
   MyVerification,
   NotificationsResp,
+  MessageResp,
   Post,
   PostResp,
   PublicAccount,
+  PublicUserResp,
   PublicSettings,
   RegisterBody,
+  ResetPasswordResp,
   SendDirectMessageBody,
   SendDirectMessageResp,
   SmsCodeResp,
+  StartDirectConversationResp,
   SubmitVerificationBody,
+  SubmitAppealResp,
   UnreadResp,
   UpdateProfileBody,
+  UpdatePostResp,
   VerificationResp,
 } from '../model/Types';
 
@@ -77,6 +88,7 @@ let nextCommentId = 100;
 let nextMessageId = 100;
 let nextAiMessageId = 100;
 let nextAiConversationId = 10;
+let nextAppealId = 2;
 
 let posts: Post[] = [
   {
@@ -338,6 +350,7 @@ let aiConversations: AIConversation[] = [
         role: 'assistant',
         text: '即日起至 9 月 15 日，图书馆闭馆时间延长至 22:30，三楼自习区全天开放。',
         source: '图书馆暑期延时开放公告',
+        needs_feedback: true,
         created_at: '2026-08-29T20:00:05+08:00',
       },
     ],
@@ -347,6 +360,19 @@ let aiConversations: AIConversation[] = [
 
 let verification: MyVerification | null = null;
 let aiRemaining = 20;
+let appeals: Appeal[] = [
+  {
+    id: 1,
+    punishment_id: 90,
+    account_id: 1,
+    kind: 'mute',
+    reason: '希望复核这次禁言处罚。',
+    status: 'lifted',
+    result: '复核后已解除处罚。',
+    created_at: '2026-08-20T10:00:00+08:00',
+    resolved_at: '2026-08-21T09:00:00+08:00',
+  },
+];
 
 function delay(): Promise<void> {
   return new Promise<void>((resolve) => {
@@ -408,6 +434,10 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
     const resp: AccountResp = { account: MOCK_ACCOUNT };
     return resp as T;
   }
+  if (clean === '/api/v1/auth/reset-password' && method === http.RequestMethod.POST) {
+    const resp: ResetPasswordResp = { reset: true };
+    return resp as T;
+  }
   if (clean === '/api/v1/auth/logout') {
     return undefined as T;
   }
@@ -417,6 +447,25 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
   }
   if (clean === '/api/v1/me' && method === http.RequestMethod.DELETE) {
     return undefined as T;
+  }
+  if (clean === '/api/v1/me/appeals' && method === http.RequestMethod.GET) {
+    const resp: ItemsResp<Appeal> = { items: appeals };
+    return resp as T;
+  }
+  if (clean === '/api/v1/me/appeals' && method === http.RequestMethod.POST) {
+    const input = body as CreateAppealBody;
+    const appeal: Appeal = {
+      id: nextAppealId++,
+      punishment_id: input.punishment_id,
+      account_id: MOCK_ACCOUNT.id,
+      kind: 'mute',
+      reason: input.reason,
+      status: 'pending',
+      created_at: nowIso(),
+    };
+    appeals = [appeal, ...appeals];
+    const resp: SubmitAppealResp = { submitted: true };
+    return resp as T;
   }
 
   // ---- 帖子 ----
@@ -467,6 +516,24 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
     const post = findPost(Number(segments[3]));
     const resp: PostResp = { post: post ?? posts[0] };
     return resp as T;
+  }
+  if (segments.length === 4 && segments[2] === 'posts' && method === http.RequestMethod.PUT) {
+    const post = findPost(Number(segments[3]));
+    const input = body as CreatePostBody;
+    if (post) {
+      post.text = input.text;
+      post.images = input.images;
+      post.tags = input.tags;
+      post.status = 'pending';
+      post.updated_at = nowIso();
+    }
+    const resp: UpdatePostResp = { post: post ?? posts[0], message: '修改稿已提交审核（本地 Mock）' };
+    return resp as T;
+  }
+  if (segments.length === 4 && segments[2] === 'posts' && method === http.RequestMethod.DELETE) {
+    const id = Number(segments[3]);
+    posts = posts.filter((post: Post) => post.id !== id);
+    return undefined as T;
   }
   if (segments.length === 5 && segments[2] === 'posts' && segments[4] === 'like') {
     const post = findPost(Number(segments[3]));
@@ -522,10 +589,36 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
     const resp: ItemsResp<Post> = { items: posts.filter((item: Post) => item.bookmarked) };
     return resp as T;
   }
+  if (clean === '/api/v1/tags') {
+    const values: string[] = [];
+    posts.forEach((post: Post) => (post.tags ?? []).forEach((tag: string) => {
+      if (values.indexOf(tag) < 0) values.push(tag);
+    }));
+    const resp: ItemsResp<string> = { items: values };
+    return resp as T;
+  }
+  if (segments.length === 4 && segments[2] === 'users' && method === http.RequestMethod.GET) {
+    const id = Number(segments[3]);
+    const authored = posts.filter((post: Post) => post.author.id === id && post.status === 'published');
+    const user = authored.length > 0 ? authored[0].author : AUTHOR_LIN;
+    const resp: PublicUserResp = { user: user, posts: authored };
+    return resp as T;
+  }
+  if (segments.length >= 5 && segments[segments.length - 1] === 'reports') {
+    const resp: MessageResp = { message: '举报已提交（本地 Mock）' };
+    return resp as T;
+  }
 
   // ---- 公告 / 设置 / 百宝箱 ----
   if (clean === '/api/v1/announcements') {
     const resp: ItemsResp<Announcement> = { items: announcements };
+    return resp as T;
+  }
+  if (segments.length === 4 && segments[2] === 'announcements') {
+    const id = Number(segments[3]);
+    const resp: AnnouncementResp = {
+      announcement: announcements.find((item: Announcement) => item.id === id) ?? announcements[0]
+    };
     return resp as T;
   }
   if (clean === '/api/v1/settings/public') {
@@ -612,6 +705,10 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
       unread += item.unread_count;
     });
     const resp: DirectConversationsResp = { items: directConversations, unread: unread };
+    return resp as T;
+  }
+  if (clean === '/api/v1/direct-conversations' && method === http.RequestMethod.POST) {
+    const resp: StartDirectConversationResp = { item: directConversations[0] };
     return resp as T;
   }
   if (segments.length === 4 && segments[2] === 'direct-conversations'
@@ -718,6 +815,12 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
     const resp: AIConversationResp = { conversation: conversation };
     return resp as T;
   }
+  if (segments.length === 5 && segments[3] === 'conversations'
+    && method === http.RequestMethod.DELETE) {
+    const id = Number(segments[4]);
+    aiConversations = aiConversations.filter((item: AIConversation) => item.id !== id);
+    return undefined as T;
+  }
   if (segments.length === 6 && segments[3] === 'conversations' && segments[5] === 'messages'
     && method === http.RequestMethod.POST) {
     const input = body as AskAIBody;
@@ -736,6 +839,28 @@ export async function mockRequest<T>(method: http.RequestMethod, path: string, b
       aiRemaining -= 1;
     }
     const resp: AskAIResp = { user_message: userMessage, answer: answer, remaining: aiRemaining };
+    return resp as T;
+  }
+  if (segments.length === 8 && segments[3] === 'conversations' && segments[5] === 'messages'
+    && segments[7] === 'feedback' && method === http.RequestMethod.POST) {
+    const conversationId = Number(segments[4]);
+    const messageId = Number(segments[6]);
+    const input = body as AIFeedbackBody;
+    const found = aiConversations.find((item: AIConversation) => item.id === conversationId);
+    const target = found?.messages.find((item: AIMessage) => item.id === messageId);
+    if (target) {
+      target.needs_feedback = false;
+      target.feedback = input.satisfied ? 'yes' : 'no';
+    }
+    if (input.satisfied) {
+      const resp: AIFeedbackResp = { message: target, remaining: aiRemaining };
+      return resp as T;
+    }
+    const answer = newAiMessage('assistant', '这是跳过知识库后的模拟检索结果。', '联网检索');
+    if (found) {
+      found.messages = [...found.messages, answer];
+    }
+    const resp: AIFeedbackResp = { answer: answer, remaining: aiRemaining };
     return resp as T;
   }
 

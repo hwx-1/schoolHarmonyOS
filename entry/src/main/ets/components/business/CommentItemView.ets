@@ -17,6 +17,8 @@ export struct CommentItemView {
   /** 是否回复条目：头像更小、整体更紧凑。 */
   @Prop isReply: boolean = false;
   onReply: (comment: CommentItem) => void = () => {};
+  onAuthor: (comment: CommentItem) => void = () => {};
+  onReport: (comment: CommentItem) => void = () => {};
 
   build() {
     Row({ space: 10 }) {
@@ -25,11 +27,17 @@ export struct CommentItemView {
         nickname: this.comment.author.nickname,
         diameter: this.isReply ? 24 : 32
       })
+      .onClick(() => {
+        if (!this.comment.deleted) this.onAuthor(this.comment);
+      })
       Column({ space: 4 }) {
         Row({ space: 6 }) {
           Text(this.comment.deleted ? '用户' : this.comment.author.nickname)
             .fontSize(13)
             .fontColor(AppColors.TEXT_SECONDARY)
+            .onClick(() => {
+              if (!this.comment.deleted) this.onAuthor(this.comment);
+            })
           if (!this.comment.deleted && this.replyToName.length > 0) {
             Text(`回复 ${this.replyToName}`)
               .fontSize(13)
@@ -51,6 +59,11 @@ export struct CommentItemView {
             Text('回复')
               .fontSize(11)
               .fontColor(AppColors.TEXT_SECONDARY)
+              .onClick(() => this.onReply(this.comment))
+            Text('举报')
+              .fontSize(11)
+              .fontColor(AppColors.TEXT_SECONDARY)
+              .onClick(() => this.onReport(this.comment))
           }
         }
       }
@@ -60,11 +73,5 @@ export struct CommentItemView {
     .width('100%')
     .padding({ top: 10, bottom: 10 })
     .alignItems(VerticalAlign.Top)
-    .onClick(() => {
-      // 抖音交互：点评论卡片任意位置即进入回复模式（父页面负责唤起键盘）。
-      if (!this.comment.deleted) {
-        this.onReply(this.comment);
-      }
-    })
   }
 }

@@ -15,7 +15,7 @@ export struct LoginPage {
   @State submitting: boolean = false;
 
   private formReady(): boolean {
-    return this.phone.length === 11 && this.password.length >= 6;
+    return this.phone.length === 11 && this.password.length >= 8;
   }
 
   private toast(message: string): void {
@@ -40,8 +40,8 @@ export struct LoginPage {
       this.toast('请输入 11 位手机号');
       return;
     }
-    if (this.password.length < 6) {
-      this.toast('密码至少 6 位');
+    if (this.password.length < 8) {
+      this.toast('密码至少 8 位');
       return;
     }
     if (!this.agreed) {
@@ -54,7 +54,7 @@ export struct LoginPage {
       Session.applyAccount(resp.account);
       NotificationSync.syncNow();
       this.toast(`欢迎回来，${resp.account.nickname}`);
-      this.navStack.replacePath({ name: 'Tabs' });
+      this.navStack.replacePath({ name: resp.account.profile_done ? 'Tabs' : 'Onboarding' });
     } catch (err) {
       this.toast(err instanceof ApiError ? err.message : '登录失败，请稍后重试');
     } finally {
@@ -104,7 +104,7 @@ export struct LoginPage {
             .backgroundColor(AppColors.CARD_BG)
             .borderRadius(12)
 
-          TextInput({ placeholder: '密码（至少 6 位）', text: $$this.password })
+          TextInput({ placeholder: '密码（至少 8 位）', text: $$this.password })
             .type(InputType.Password)
             .showPasswordIcon(true)
             .height(52)
@@ -155,6 +155,14 @@ export struct LoginPage {
               })
           }
           .margin({ top: 22, bottom: 40 })
+
+          Text('忘记密码？')
+            .fontSize(13)
+            .fontColor(AppColors.PRIMARY)
+            .margin({ bottom: 40 })
+            .onClick(() => {
+              this.navStack.pushPath({ name: 'ForgotPassword' });
+            })
         }
         .width('100%')
         .padding({ left: 28, right: 28 })

@@ -3,11 +3,15 @@ import { request } from './Http';
 import { AppState } from './AppState';
 import {
   AccountResp,
+  Appeal,
+  AIFeedbackBody,
+  AIFeedbackResp,
   AIConversation,
   AIConversationResp,
   AIConversationsResp,
   AIModel,
   Announcement,
+  AnnouncementResp,
   AppNotification,
   AskAIBody,
   AskAIResp,
@@ -16,6 +20,7 @@ import {
   ChangePasswordResp,
   CommentsResp,
   CreateAIConversationBody,
+  CreateAppealBody,
   CreateCommentBody,
   CreateCommentResp,
   CreatePostBody,
@@ -25,12 +30,17 @@ import {
   DirectConversationResp,
   ItemsResp,
   LoginBody,
+  MessageResp,
   MarkNotificationsReadBody,
   NotificationsResp,
   Post,
   PostResp,
+  PublicUserResp,
   PublicSettings,
   RegisterBody,
+  ReportBody,
+  ResetPasswordBody,
+  ResetPasswordResp,
   SendDirectMessageBody,
   SendDirectMessageResp,
   SmsCodeBody,
@@ -38,8 +48,10 @@ import {
   StartDirectConversationBody,
   StartDirectConversationResp,
   SubmitVerificationBody,
+  SubmitAppealResp,
   UnreadResp,
   UpdateProfileBody,
+  UpdatePostResp,
   VerificationResp,
 } from '../model/Types';
 
@@ -51,13 +63,18 @@ export class Api {
     return request<AccountResp>(http.RequestMethod.POST, '/api/v1/auth/login', body);
   }
 
-  static smsCode(phone: string): Promise<SmsCodeResp> {
-    const body: SmsCodeBody = { phone, purpose: 'register' };
+  static smsCode(phone: string, purpose: string = 'register'): Promise<SmsCodeResp> {
+    const body: SmsCodeBody = { phone, purpose };
     return request<SmsCodeResp>(http.RequestMethod.POST, '/api/v1/auth/sms-code', body);
   }
 
   static register(input: RegisterBody): Promise<AccountResp> {
     return request<AccountResp>(http.RequestMethod.POST, '/api/v1/auth/register', input);
+  }
+
+  static resetPassword(phone: string, code: string, password: string): Promise<ResetPasswordResp> {
+    const body: ResetPasswordBody = { phone, code, password };
+    return request<ResetPasswordResp>(http.RequestMethod.POST, '/api/v1/auth/reset-password', body);
   }
 
   static logout(): Promise<void> {
@@ -91,6 +108,17 @@ export class Api {
     return response;
   }
 
+  static async updatePost(id: number, input: CreatePostBody): Promise<UpdatePostResp> {
+    const response = await request<UpdatePostResp>(http.RequestMethod.PUT, `/api/v1/posts/${id}`, input);
+    AppState.publishPostChange();
+    return response;
+  }
+
+  static async deletePost(id: number): Promise<void> {
+    await request<void>(http.RequestMethod.DELETE, `/api/v1/posts/${id}`);
+    AppState.publishPostChange();
+  }
+
   static async likePost(id: number): Promise<PostResp> {
     const response = await request<PostResp>(http.RequestMethod.POST, `/api/v1/posts/${id}/like`);
     AppState.publishPostChange();
@@ -122,9 +150,36 @@ export class Api {
     return request(http.RequestMethod.GET, '/api/v1/me/bookmarks');
   }
 
+  static getUser(id: number): Promise<PublicUserResp> {
+    return request<PublicUserResp>(http.RequestMethod.GET, `/api/v1/users/${id}`);
+  }
+
+  static listTags(): Promise<ItemsResp<string>> {
+    return request<ItemsResp<string>>(http.RequestMethod.GET, '/api/v1/tags');
+  }
+
+  static reportPost(id: number, reason: string): Promise<MessageResp> {
+    const body: ReportBody = { reason };
+    return request<MessageResp>(http.RequestMethod.POST, `/api/v1/posts/${id}/reports`, body);
+  }
+
+  static reportComment(id: number, reason: string): Promise<MessageResp> {
+    const body: ReportBody = { reason };
+    return request<MessageResp>(http.RequestMethod.POST, `/api/v1/comments/${id}/reports`, body);
+  }
+
+  static reportUser(id: number, reason: string): Promise<MessageResp> {
+    const body: ReportBody = { reason };
+    return request<MessageResp>(http.RequestMethod.POST, `/api/v1/users/${id}/reports`, body);
+  }
+
   // ---- 公告 / 设置 / 百宝箱 ----
   static listAnnouncements(): Promise<ItemsResp<Announcement>> {
     return request(http.RequestMethod.GET, '/api/v1/announcements');
+  }
+
+  static getAnnouncement(id: number): Promise<AnnouncementResp> {
+    return request<AnnouncementResp>(http.RequestMethod.GET, `/api/v1/announcements/${id}`);
   }
 
   static publicSettings(): Promise<PublicSettings> {
@@ -158,6 +213,15 @@ export class Api {
 
   static deleteAccount(): Promise<void> {
     return request<void>(http.RequestMethod.DELETE, '/api/v1/me');
+  }
+
+  static myAppeals(): Promise<ItemsResp<Appeal>> {
+    return request<ItemsResp<Appeal>>(http.RequestMethod.GET, '/api/v1/me/appeals');
+  }
+
+  static createAppeal(punishmentId: number, reason: string): Promise<SubmitAppealResp> {
+    const body: CreateAppealBody = { punishment_id: punishmentId, reason };
+    return request<SubmitAppealResp>(http.RequestMethod.POST, '/api/v1/me/appeals', body);
   }
 
   // ---- 通知 ----
@@ -210,6 +274,12 @@ export class Api {
     return response;
   }
 
+  static reportDirectConversation(id: number, reason: string): Promise<MessageResp> {
+    const body: ReportBody = { reason };
+    return request<MessageResp>(
+      http.RequestMethod.POST, `/api/v1/direct-conversations/${id}/reports`, body);
+  }
+
   // ---- AI 问答 ----
   static aiModels(): Promise<ItemsResp<AIModel>> {
     return request(http.RequestMethod.GET, '/api/v1/ai/models');
@@ -237,5 +307,16 @@ export class Api {
     }
     return request<AskAIResp>(
       http.RequestMethod.POST, `/api/v1/ai/conversations/${id}/messages`, body);
+  }
+
+  static aiFeedback(id: number, messageId: number, satisfied: boolean): Promise<AIFeedbackResp> {
+    const body: AIFeedbackBody = { satisfied };
+    return request<AIFeedbackResp>(http.RequestMethod.POST,
+      `/api/v1/ai/conversations/${id}/messages/${messageId}/feedback`, body);
+  }
+
+
+  static deleteAIConversation(id: number): Promise<void> {
+    return request<void>(http.RequestMethod.DELETE, `/api/v1/ai/conversations/${id}`);
   }
 }

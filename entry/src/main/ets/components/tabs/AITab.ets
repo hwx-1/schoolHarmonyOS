@@ -1,6 +1,6 @@
 import { Api } from '../../service/Api';
 import { ApiError } from '../../service/Http';
-import { AIChatParam, AIConversation } from '../../model/Types';
+import { AIChatParam, AIConversation, AIModel } from '../../model/Types';
 import { TimeUtil } from '../../utils/TimeUtil';
 import { AppColors } from '../../constants/AppConfig';
 import { LoadingView } from '../common/LoadingView';
@@ -15,6 +15,8 @@ export struct AITab {
   @State refreshing: boolean = false;
   @State conversations: AIConversation[] = [];
   @State remaining: number = 0;
+  @State models: AIModel[] = [];
+  @State selectedModel: string = '';
 
   aboutToAppear(): void {
     this.loadAll();
@@ -33,6 +35,11 @@ export struct AITab {
       const resp = await Api.aiConversations();
       this.conversations = resp.items;
       this.remaining = resp.remaining;
+      const modelResp = await Api.aiModels();
+      this.models = modelResp.items.filter((item: AIModel) => item.enabled && item.public);
+      if (this.selectedModel.length === 0 && this.models.length > 0) {
+        this.selectedModel = this.models[0].model;
+      }
     } catch {
     }
     this.loading = false;
@@ -41,12 +48,32 @@ export struct AITab {
 
   private async createConversation(): Promise<void> {
     try {
-      const resp = await Api.createAIConversation('', '');
+      const resp = await Api.createAIConversation('', this.selectedModel);
       const param: AIChatParam = { id: resp.conversation.id, title: resp.conversation.title };
       this.navStack.pushPath({ name: 'AIChat', param: param });
     } catch (err) {
       this.toast(err instanceof ApiError ? err.message : '创建会话失败');
     }
+  }
+
+  private confirmDelete(item: AIConversation): void {
+    this.getUIContext().getPromptAction().showDialog({
+      title: '删除 AI 会话',
+      message: '删除后各设备将同步移除，且无法恢复。',
+      buttons: [
+        { text: '取消', color: AppColors.TEXT_SECONDARY },
+        { text: '删除', color: AppColors.DANGER },
+      ]
+    }).then((resp) => {
+      if (resp.index === 1) {
+        Api.deleteAIConversation(item.id).then(() => {
+          this.conversations = this.conversations.filter((conversation: AIConversation) => conversation.id !== item.id);
+          this.toast('会话已删除');
+        }).catch((err: Error) => this.toast(err.message || '删除失败'));
+      }
+    }).catch(() => {
+      // 用户取消或系统对话框异常时不执行删除。
+    });
   }
 
   build() {
@@ -62,6 +89,26 @@ export struct AITab {
           this.createConversation();
         }
       })
+
+      if (this.models.length > 0) {
+        Scroll() {
+          Row({ space: 8 }) {
+            ForEach(this.models, (model: AIModel) => {
+              Text(model.name)
+                .fontSize(12)
+                .fontColor(this.selectedModel === model.model ? Color.White : AppColors.TEXT_SECONDARY)
+                .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+                .backgroundColor(this.selectedModel === model.model ? AppColors.PRIMARY : AppColors.CARD_BG)
+                .borderRadius(16)
+                .onClick(() => this.selectedModel = model.model)
+            }, (model: AIModel) => `${model.id}:${model.model}`)
+          }
+          .padding({ left: 12, right: 12, bottom: 8 })
+        }
+        .scrollable(ScrollDirection.Horizontal)
+        .scrollBar(BarState.Off)
+        .width('100%')
+      }
 
       if (this.loading) {
         LoadingView()
@@ -85,6 +132,11 @@ export struct AITab {
                     Text(TimeUtil.format(item.created_at))
                       .fontSize(11)
                       .fontColor(AppColors.TEXT_SECONDARY)
+                    Text('删除')
+                      .fontSize(11)
+                      .fontColor(AppColors.DANGER)
+                      .margin({ left: 12 })
+                      .onClick(() => this.confirmDelete(item))
                   }
                   .width('100%')
                 }

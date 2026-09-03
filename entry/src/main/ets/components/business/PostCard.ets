@@ -18,6 +18,7 @@ export struct PostCard {
   onLike: (post: Post) => void = () => {};
   onBookmark: (post: Post) => void = () => {};
   onTag: (tag: string) => void = () => {};
+  onAuthor: (post: Post) => void = () => {};
 
   private imageUrls(): string[] {
     if (!this.post.images) {
@@ -32,6 +33,15 @@ export struct PostCard {
       return 1;
     }
     return count === 2 || count === 4 ? 2 : 3;
+  }
+
+  private statusText(): string {
+    if (this.post.status === 'pending') return '审核中';
+    if (this.post.status === 'rejected') return '未通过';
+    if (this.post.status === 'reported_hidden') return '复核中';
+    if (this.post.status === 'removed') return '已下架';
+    if (this.post.status === 'deleted') return '已删除';
+    return '';
   }
 
   build() {
@@ -55,6 +65,13 @@ export struct PostCard {
                 .padding({ left: 6, right: 6, top: 1, bottom: 1 })
                 .border({ width: 1, color: AppColors.ORANGE, radius: 4 })
             }
+            if (this.statusText().length > 0) {
+              Text(this.statusText())
+                .fontSize(10)
+                .fontColor(AppColors.ORANGE)
+                .padding({ left: 6, right: 6, top: 1, bottom: 1 })
+                .border({ width: 1, color: AppColors.ORANGE, radius: 4 })
+            }
           }
           Text(TimeUtil.format(this.post.created_at))
             .fontSize(12)
@@ -62,7 +79,7 @@ export struct PostCard {
         }
         .alignItems(HorizontalAlign.Start)
       }
-      .onClick(() => this.onOpen(this.post))
+      .onClick(() => this.onAuthor(this.post))
 
       // 正文
       Text(this.post.text ?? '')

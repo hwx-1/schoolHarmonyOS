@@ -1,7 +1,7 @@
 {
   "network-security-config": {
     "base-config": {
-      "cleartextTrafficPermitted": true
+      "cleartextTrafficPermitted": false
     },
     "domain-config": [
       {
@@ -13,10 +13,6 @@
           {
             "subdomains": false,
             "domain-name": "127.0.0.1"
-          },
-          {
-            "subdomains": false,
-            "domain-name": "192.168.18.227"
           }
         ],
         "cleartextTrafficPermitted": true

@@ -1,7 +1,7 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Api } from '../service/Api';
 import { ApiError } from '../service/Http';
-import { DirectMessage } from '../model/Types';
+import { DirectMessage, ReportParam } from '../model/Types';
 import { Session } from '../service/Session';
 import { AppColors } from '../constants/AppConfig';
 import { MessageBubble } from '../components/business/MessageBubble';
@@ -138,6 +138,15 @@ export struct ChatPage {
     this.send(this.greeting, true);
   }
 
+  private reportConversation(): void {
+    const param: ReportParam = {
+      targetType: 'dm',
+      targetId: this.conversationId,
+      targetName: `与 ${this.otherName || '该用户'} 的私信`
+    };
+    this.navStack.pushPath({ name: 'Report', param: param });
+  }
+
   build() {
     NavDestination() {
       Column() {
@@ -146,7 +155,10 @@ export struct ChatPage {
           titleTag: this.unlocked ? '自由聊' : '',
           onBack: () => {
             this.navStack.pop();
-          }
+          },
+          rightText: '举报',
+          rightColor: AppColors.DANGER,
+          onRight: () => this.reportConversation()
         })
 
         if (this.loading) {

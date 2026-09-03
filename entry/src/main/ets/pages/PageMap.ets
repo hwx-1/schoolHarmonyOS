@@ -18,14 +18,23 @@ import { NotificationsPage } from './Notifications';
 import { LegalDocumentPage } from './LegalDocument';
 import { NotificationSettingsPage } from './NotificationSettings';
 import { AboutPage } from './About';
+import { ForgotPasswordPage } from './ForgotPassword';
+import { PublicProfilePage } from './PublicProfile';
+import { ReportPage } from './Report';
+import { AppealsPage } from './Appeals';
 import {
   AIChatParam,
+  AppealsParam,
   ChatParam,
+  ComposeParam,
   ContentListParam,
   LegalDocumentParam,
   NotificationDetailParam,
   PostDetailParam,
+  PublicProfileParam,
+  ReportParam,
   SearchParam,
+  VerificationParam,
 } from '../model/Types';
 
 /**
@@ -39,6 +48,8 @@ export function PageMap(name: string, param: Object | undefined) {
     LoginPage()
   } else if (name === 'Register') {
     RegisterPage()
+  } else if (name === 'ForgotPassword') {
+    ForgotPasswordPage()
   } else if (name === 'Tabs') {
     TabsPage()
   } else if (name === 'PostDetail') {
@@ -54,7 +65,9 @@ export function PageMap(name: string, param: Object | undefined) {
   } else if (name === 'About') {
     AboutPage()
   } else if (name === 'Compose') {
-    ComposePage()
+    ComposePage({ postId: param ? (param as ComposeParam).id : 0 })
+  } else if (name === 'Onboarding') {
+    EditProfilePage({ onboarding: true })
   } else if (name === 'Search') {
     SearchPage({ initialKeyword: (param as SearchParam).keyword })
   } else if (name === 'Announcements') {
@@ -78,7 +91,17 @@ export function PageMap(name: string, param: Object | undefined) {
   } else if (name === 'EditProfile') {
     EditProfilePage()
   } else if (name === 'Verification') {
-    VerificationPage()
+    VerificationPage({ onboarding: param ? (param as VerificationParam).onboarding : false })
+  } else if (name === 'PublicProfile') {
+    PublicProfilePage({ userId: (param as PublicProfileParam).id })
+  } else if (name === 'Report') {
+    ReportPage({
+      targetType: (param as ReportParam).targetType,
+      targetId: (param as ReportParam).targetId,
+      targetName: (param as ReportParam).targetName
+    })
+  } else if (name === 'Appeals') {
+    AppealsPage({ punishmentId: param ? (param as AppealsParam).punishmentId : 0 })
   } else if (name === 'AccountSettings') {
     AccountSettingsPage()
   }

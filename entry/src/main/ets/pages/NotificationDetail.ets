@@ -1,5 +1,6 @@
 import { AppColors } from '../constants/AppConfig';
-import { AppNotification, PostDetailParam } from '../model/Types';
+import { Appeal, AppealsParam, AppNotification, PostDetailParam } from '../model/Types';
+import { Api } from '../service/Api';
 import { NavBar } from '../components/common/NavBar';
 import { TimeUtil } from '../utils/TimeUtil';
 
@@ -71,6 +72,27 @@ export struct NotificationDetailPage {
     this.navStack.pushPath({ name: 'PostDetail', param: param });
   }
 
+  private canAppeal(): boolean {
+    return this.notification.type === 'punishment'
+      && this.notification.ref_type === 'punishment'
+      && this.notification.ref_id !== undefined;
+  }
+
+  private async openAppeal(): Promise<void> {
+    if (!this.canAppeal() || this.notification.ref_id === undefined) {
+      return;
+    }
+    let appeals: Appeal[] = [];
+    try {
+      appeals = (await Api.myAppeals()).items;
+    } catch {
+      // 列表加载失败时仍允许进入申诉页，由页面统一展示错误或提交入口。
+    }
+    const exists = appeals.some((item: Appeal) => item.punishment_id === this.notification.ref_id);
+    const param: AppealsParam = { punishmentId: exists ? 0 : this.notification.ref_id };
+    this.navStack.pushPath({ name: 'Appeals', param: param });
+  }
+
   build() {
     NavDestination() {
       Column() {
@@ -134,6 +156,14 @@ export struct NotificationDetailPage {
                 .fontSize(15)
                 .backgroundColor(AppColors.PRIMARY)
                 .onClick(() => this.openRelatedPost())
+            }
+            if (this.canAppeal()) {
+              Button('查看或提交申诉')
+                .width('100%')
+                .height(46)
+                .fontSize(15)
+                .backgroundColor(AppColors.ORANGE)
+                .onClick(() => this.openAppeal())
             }
           }
           .width('100%')

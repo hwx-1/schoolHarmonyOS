@@ -16,8 +16,8 @@ export struct AIChatPage {
   @State draft: string = '';
   @State asking: boolean = false;
   @State title: string = 'AI 校园助手';
-  @State deepThink: boolean = false;
-  @State webSearch: boolean = false;
+  @State model: string = '';
+  @State feedbackPendingId: number = 0;
   private scroller: Scroller = new Scroller();
   private readonly examples: string[] = ['图书馆几点关门？', '教务处电话是多少？', '奖学金怎么申请？'];
 
@@ -43,6 +43,7 @@ export struct AIChatPage {
       const found = resp.items.find((item: AIConversation) => item.id === this.conversationId);
       if (found) {
         this.messages = found.messages;
+        this.model = found.model;
         if (found.title.length > 0) {
           this.title = found.title;
         }
@@ -65,7 +66,7 @@ export struct AIChatPage {
     this.asking = true;
     this.draft = '';
     try {
-      const resp = await Api.askAI(this.conversationId, question, '');
+      const resp = await Api.askAI(this.conversationId, question, this.model);
       this.messages = [...this.messages, resp.user_message, resp.answer];
       this.remaining = resp.remaining;
       this.scrollToBottom();
@@ -78,7 +79,7 @@ export struct AIChatPage {
 
   private async newConversation(): Promise<void> {
     try {
-      const resp = await Api.createAIConversation('', '');
+      const resp = await Api.createAIConversation('', this.model);
       const param: AIChatParam = { id: resp.conversation.id, title: resp.conversation.title };
       this.navStack.replacePath({ name: 'AIChat', param: param });
     } catch (err) {
@@ -86,17 +87,43 @@ export struct AIChatPage {
     }
   }
 
-  /** 开关胶囊：深度思考 / 联网搜索 */
-  @Builder
-  private toggleChip(label: string, active: boolean, onTap: () => void): void {
-    Text(label)
-      .fontSize(12)
-      .fontColor(active ? AppColors.PRIMARY : AppColors.TEXT_SECONDARY)
-      .padding({ left: 10, right: 10, top: 5, bottom: 5 })
-      .backgroundColor(active ? '#E8EFFC' : Color.Transparent)
-      .borderRadius(14)
-      .border({ width: 1, color: active ? AppColors.PRIMARY : AppColors.DIVIDER })
-      .onClick(onTap)
+  private async sendFeedback(messageId: number, satisfied: boolean): Promise<void> {
+    if (this.feedbackPendingId !== 0) {
+      return;
+    }
+    this.feedbackPendingId = messageId;
+    try {
+      const resp = await Api.aiFeedback(this.conversationId, messageId, satisfied);
+      this.remaining = resp.remaining;
+      this.messages = this.messages.map((message: AIMessage) => {
+        if (message.id !== messageId) {
+          return message;
+        }
+        if (resp.message) {
+          return resp.message;
+        }
+        const updated: AIMessage = {
+          id: message.id,
+          role: message.role,
+          text: message.text,
+          model: message.model,
+          source: message.source,
+          needs_feedback: false,
+          feedback: satisfied ? 'yes' : 'no',
+          created_at: message.created_at,
+        };
+        return updated;
+      });
+      if (resp.answer) {
+        this.messages = [...this.messages, resp.answer];
+        this.scrollToBottom();
+      }
+      this.toast(satisfied ? '感谢反馈' : '已为你重新检索');
+    } catch (err) {
+      this.toast(err instanceof ApiError ? err.message : '反馈失败，请稍后重试');
+    } finally {
+      this.feedbackPendingId = 0;
+    }
   }
 
   build() {
@@ -192,6 +219,38 @@ export struct AIChatPage {
                       .fontColor(AppColors.TEXT_SECONDARY)
                   }
                   .width('100%')
+                  if (message.needs_feedback) {
+                    Column({ space: 8 }) {
+                      Text('这个答案是你想要的吗？')
+                        .fontSize(12)
+                        .fontColor(AppColors.TEXT_SECONDARY)
+                      Row({ space: 10 }) {
+                        Button('有帮助')
+                          .height(32)
+                          .fontSize(12)
+                          .backgroundColor(AppColors.PRIMARY)
+                          .enabled(this.feedbackPendingId === 0)
+                          .onClick(() => this.sendFeedback(message.id, true))
+                        Button(this.feedbackPendingId === message.id ? '正在检索…' : '联网重答')
+                          .height(32)
+                          .fontSize(12)
+                          .fontColor(AppColors.PRIMARY)
+                          .backgroundColor('#E8EFFC')
+                          .enabled(this.feedbackPendingId === 0)
+                          .onClick(() => this.sendFeedback(message.id, false))
+                      }
+                    }
+                    .width('100%')
+                    .alignItems(HorizontalAlign.Start)
+                  } else if (message.feedback === 'yes') {
+                    Text('已确认：知识库答案有帮助')
+                      .fontSize(11)
+                      .fontColor(AppColors.TEXT_SECONDARY)
+                  } else if (message.feedback === 'no') {
+                    Text('已反馈：知识库答案未解决问题')
+                      .fontSize(11)
+                      .fontColor(AppColors.TEXT_SECONDARY)
+                  }
                 }
                 .width('100%')
                 .alignItems(HorizontalAlign.Start)
@@ -232,13 +291,9 @@ export struct AIChatPage {
             .padding({ left: 4, right: 4, top: 6, bottom: 6 })
 
           Row() {
-            this.toggleChip('深度思考', this.deepThink, () => {
-              this.deepThink = !this.deepThink;
-            })
-            Blank().width(8)
-            this.toggleChip('联网搜索', this.webSearch, () => {
-              this.webSearch = !this.webSearch;
-            })
+            Text('AI 回答可能有误，请核对原始来源')
+              .fontSize(11)
+              .fontColor(AppColors.TEXT_SECONDARY)
             Blank().layoutWeight(1)
             // 圆形发送键：有内容时点亮为主题蓝
             Text('↑')

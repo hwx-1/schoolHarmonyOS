@@ -7,10 +7,12 @@ import { AppColors } from '../constants/AppConfig';
 import { LoadingView } from '../components/common/LoadingView';
 import { FormField } from '../components/common/FormField';
 import { NavBar } from '../components/common/NavBar';
+import { Session } from '../service/Session';
 
 @Component
 export struct VerificationPage {
   @Consume('navStack') navStack: NavPathStack;
+  @Prop onboarding: boolean = false;
   @State loading: boolean = true;
   @State current: MyVerification | null = null;
   @State realName: string = '';
@@ -32,6 +34,9 @@ export struct VerificationPage {
   }
 
   private async load(): Promise<void> {
+    const account = Session.currentAccount();
+    this.realName = account?.real_name ?? '';
+    this.studentNo = account?.student_no ?? '';
     try {
       const resp = await Api.myVerification();
       this.current = resp.verification;
@@ -141,7 +146,7 @@ export struct VerificationPage {
         NavBar({
           title: '学生认证',
           onBack: () => {
-            this.navStack.pop();
+            if (!this.onboarding) this.navStack.pop();
           }
         })
 
@@ -211,6 +216,15 @@ export struct VerificationPage {
                   .fontSize(12)
                   .fontColor(AppColors.TEXT_SECONDARY)
                   .width('100%')
+              }
+
+              if (this.onboarding && this.current) {
+                Button('先浏览社区')
+                  .width('100%')
+                  .height(46)
+                  .fontSize(15)
+                  .backgroundColor(AppColors.PRIMARY)
+                  .onClick(() => this.navStack.replacePath({ name: 'Tabs' }))
               }
             }
             .width('100%')

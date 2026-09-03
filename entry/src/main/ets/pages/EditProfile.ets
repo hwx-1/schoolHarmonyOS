@@ -2,7 +2,7 @@ import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { Api } from '../service/Api';
 import { ApiError, uploadFile } from '../service/Http';
 import { Session } from '../service/Session';
-import { UpdateProfileBody } from '../model/Types';
+import { UpdateProfileBody, VerificationParam } from '../model/Types';
 import { AppColors } from '../constants/AppConfig';
 import { FormField } from '../components/common/FormField';
 import { AvatarView } from '../components/common/AvatarView';
@@ -12,6 +12,7 @@ import { createSquareAvatar } from '../utils/AvatarImage';
 @Component
 export struct EditProfilePage {
   @Consume('navStack') navStack: NavPathStack;
+  @Prop onboarding: boolean = false;
   @State nickname: string = '';
   @State gender: string = '';
   @State realName: string = '';
@@ -36,7 +37,9 @@ export struct EditProfilePage {
   }
 
   private canSave(): boolean {
-    return this.nickname.trim().length > 0 && !this.saving && !this.avatarUploading;
+    const basicReady = this.nickname.trim().length > 0 && !this.saving && !this.avatarUploading;
+    return basicReady && (!this.onboarding || (this.gender.length > 0 && this.realName.trim().length > 0
+      && this.studentNo.trim().length > 0 && this.className.trim().length > 0));
   }
 
   private async pickAvatar(): Promise<void> {
@@ -116,7 +119,12 @@ export struct EditProfilePage {
       const resp = await Api.updateProfile(body);
       Session.applyAccount(resp.account);
       this.toast('资料已保存');
-      this.navStack.pop();
+      if (this.onboarding) {
+        const param: VerificationParam = { onboarding: true };
+        this.navStack.replacePath({ name: 'Verification', param: param });
+      } else {
+        this.navStack.pop();
+      }
     } catch (err) {
       this.toast(err instanceof ApiError ? err.message : '保存失败，请稍后重试');
     } finally {
@@ -128,11 +136,11 @@ export struct EditProfilePage {
     NavDestination() {
       Column() {
         NavBar({
-          title: '编辑资料',
+          title: this.onboarding ? '完善个人资料' : '编辑资料',
           showBack: false,
-          leftText: '取消',
+          leftText: this.onboarding ? '' : '取消',
           onLeft: () => {
-            this.navStack.pop();
+            if (!this.onboarding) this.navStack.pop();
           },
           rightText: this.saving ? '保存中…' : '保存',
           rightEnabled: this.canSave(),
@@ -191,9 +199,9 @@ export struct EditProfilePage {
 
             FormField({ label: '昵称', placeholder: '请输入昵称', value: this.$nickname })
             this.GenderPicker()
-            FormField({ label: '真实姓名', placeholder: '选填', value: this.$realName })
-            FormField({ label: '学号', placeholder: '选填', value: this.$studentNo })
-            FormField({ label: '班级', placeholder: '选填', value: this.$className })
+            FormField({ label: '真实姓名', placeholder: this.onboarding ? '必填，与学籍信息一致' : '选填', value: this.$realName })
+            FormField({ label: '学号', placeholder: this.onboarding ? '必填' : '选填', value: this.$studentNo })
+            FormField({ label: '班级', placeholder: this.onboarding ? '必填，例如：计算机 2301 班' : '选填', value: this.$className })
 
             Text('学号与班级将用于学生认证核验，请如实填写。')
               .fontSize(11)

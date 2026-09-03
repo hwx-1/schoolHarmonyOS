@@ -124,6 +124,9 @@ export struct MineTab {
             () => {
             this.navStack.pushPath({ name: 'Verification' });
           })
+          this.EntryRow($r('app.media.ic_doc'), '我的申诉', '', () => {
+            this.navStack.pushPath({ name: 'Appeals' });
+          })
         }
         .width('100%')
         .backgroundColor(AppColors.CARD_BG)

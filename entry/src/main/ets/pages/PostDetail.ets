@@ -1,9 +1,12 @@
 import { Api } from '../service/Api';
+import { pasteboard } from '@kit.BasicServicesKit';
 import { ApiError, absoluteMediaUrl } from '../service/Http';
-import { ChatParam, CommentItem, Post, SearchParam } from '../model/Types';
+import {
+  ChatParam, CommentItem, ComposeParam, Post, PublicProfileParam, ReportParam, SearchParam
+} from '../model/Types';
 import { Session } from '../service/Session';
 import { TimeUtil } from '../utils/TimeUtil';
-import { AppColors } from '../constants/AppConfig';
+import { AppColors, AppConfig } from '../constants/AppConfig';
 import { AvatarView } from '../components/common/AvatarView';
 import { BadgeView } from '../components/common/BadgeView';
 import { TagChip } from '../components/common/TagChip';
@@ -90,6 +93,44 @@ export struct PostDetailPage {
     }
   }
 
+  private openAuthor(userId: number): void {
+    const param: PublicProfileParam = { id: userId };
+    this.navStack.pushPath({ name: 'PublicProfile', param: param });
+  }
+
+  private report(targetType: string, targetId: number, targetName: string): void {
+    const param: ReportParam = { targetType: targetType, targetId: targetId, targetName: targetName };
+    this.navStack.pushPath({ name: 'Report', param: param });
+  }
+
+  private editPost(): void {
+    if (!this.post) return;
+    const param: ComposeParam = { id: this.post.id };
+    this.navStack.pushPath({ name: 'Compose', param: param });
+  }
+
+  private confirmDeletePost(): void {
+    if (!this.post) return;
+    const id = this.post.id;
+    this.getUIContext().getPromptAction().showDialog({
+      title: '删除帖子',
+      message: '删除后不可恢复，确定继续吗？',
+      buttons: [
+        { text: '取消', color: AppColors.TEXT_SECONDARY },
+        { text: '删除', color: AppColors.DANGER },
+      ]
+    }).then((resp) => {
+      if (resp.index === 1) {
+        Api.deletePost(id).then(() => {
+          this.toast('帖子已删除');
+          this.navStack.pop();
+        }).catch((err: Error) => this.toast(err.message || '删除失败'));
+      }
+    }).catch(() => {
+      // 用户取消或系统对话框异常时不执行删除。
+    });
+  }
+
   private async handleLike(): Promise<void> {
     if (!this.post) {
       return;
@@ -112,6 +153,20 @@ export struct PostDetailPage {
       this.toast(resp.post.bookmarked ? '已收藏' : '已取消收藏');
     } catch (err) {
       this.toast(err instanceof ApiError ? err.message : '操作失败');
+    }
+  }
+
+  private async copyLink(): Promise<void> {
+    if (!this.post) return;
+    try {
+      const data = pasteboard.createData(
+        pasteboard.MIMETYPE_TEXT_PLAIN,
+        `${AppConfig.API_BASE_URL}/posts/${this.post.id}`
+      );
+      await pasteboard.getSystemPasteboard().setData(data);
+      this.toast('帖子链接已复制');
+    } catch {
+      this.toast('复制失败，请稍后重试');
     }
   }
 
@@ -255,6 +310,12 @@ export struct PostDetailPage {
           title: '帖子详情',
           onBack: () => {
             this.navStack.pop();
+          },
+          rightText: this.post && this.post.author.id === (Session.currentAccount()?.id ?? -1) ? '编辑' : '举报',
+          onRight: () => {
+            if (!this.post) return;
+            if (this.post.author.id === (Session.currentAccount()?.id ?? -1)) this.editPost();
+            else this.report('post', this.post.id, '帖子');
           }
         })
 
@@ -278,12 +339,14 @@ export struct PostDetailPage {
                     nickname: this.post.author.nickname,
                     diameter: 44
                   })
+                  .onClick(() => this.openAuthor(this.post!.author.id))
                   Column({ space: 2 }) {
                     Row({ space: 6 }) {
                       Text(this.post.author.nickname)
                         .fontSize(15)
                         .fontWeight(FontWeight.Medium)
                         .fontColor(AppColors.TEXT_PRIMARY)
+                        .onClick(() => this.openAuthor(this.post!.author.id))
                       if (this.post.author.verified) {
                         BadgeView({ badge: this.post.author.badge ?? 'org' })
                       }
@@ -305,6 +368,13 @@ export struct PostDetailPage {
                         this.startChat();
                       })
                   }
+                }
+
+                if (this.post.author.id === (Session.currentAccount()?.id ?? -1)) {
+                  Text('删除帖子')
+                    .fontSize(12)
+                    .fontColor(AppColors.DANGER)
+                    .onClick(() => this.confirmDeletePost())
                 }
 
                 Text(this.post.text)
@@ -364,6 +434,12 @@ export struct PostDetailPage {
                   }
                   .padding(8)
                   .onClick(() => this.handleBookmark())
+
+                  Text('分享')
+                    .fontSize(13)
+                    .fontColor(AppColors.TEXT_SECONDARY)
+                    .padding(8)
+                    .onClick(() => this.copyLink())
                 }
                 .width('100%')
                 .justifyContent(FlexAlign.End)
@@ -391,7 +467,9 @@ export struct PostDetailPage {
                     Column() {
                       CommentItemView({
                         comment: root,
-                        onReply: (target: CommentItem) => this.startReply(target)
+                        onReply: (target: CommentItem) => this.startReply(target),
+                        onAuthor: (target: CommentItem) => this.openAuthor(target.author.id),
+                        onReport: (target: CommentItem) => this.report('comment', target.id, '评论')
                       })
                       if (this.repliesOf(root.id).length > 0) {
                         Column() {
@@ -400,7 +478,9 @@ export struct PostDetailPage {
                               comment: reply,
                               isReply: true,
                               replyToName: this.replyTargetName(reply),
-                              onReply: (target: CommentItem) => this.startReply(target)
+                              onReply: (target: CommentItem) => this.startReply(target),
+                              onAuthor: (target: CommentItem) => this.openAuthor(target.author.id),
+                              onReport: (target: CommentItem) => this.report('comment', target.id, '评论')
                             })
                           }, (reply: CommentItem) => `${reply.id}:${reply.deleted ? 1 : 0}`)
                           if (this.repliesOf(root.id).length > 2) {

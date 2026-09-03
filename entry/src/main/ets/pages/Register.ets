@@ -27,8 +27,8 @@ export struct RegisterPage {
   private canSubmit(): boolean {
     return this.phone.length === 11
       && this.code.length >= 4
-      && this.password.length >= 6
-      && this.nickname.trim().length > 0
+      && this.password.length >= 8
+      && (this.nickname.trim().length === 0 || this.nickname.trim().length >= 2)
       && this.inviteCode.trim().length > 0
       && this.agreed
       && !this.submitting;
@@ -99,7 +99,7 @@ export struct RegisterPage {
       Session.applyAccount(resp.account);
       NotificationSync.syncNow();
       this.toast('注册成功，欢迎加入沈大社区');
-      this.navStack.replacePath({ name: 'Tabs' });
+      this.navStack.replacePath({ name: 'Onboarding' });
     } catch (err) {
       this.toast(err instanceof ApiError ? err.message : '注册失败，请稍后重试');
     } finally {
@@ -155,13 +155,13 @@ export struct RegisterPage {
             .width('100%')
           }
 
-          TextInput({ placeholder: '密码（至少 6 位）', text: $$this.password })
+          TextInput({ placeholder: '密码（至少 8 位）', text: $$this.password })
           .type(InputType.Password)
           .height(48)
           .backgroundColor(AppColors.CARD_BG)
           .borderRadius(10)
 
-          TextInput({ placeholder: '昵称', text: $$this.nickname })
+          TextInput({ placeholder: '昵称（选填，2–16 字符）', text: $$this.nickname })
           .maxLength(16)
           .height(48)
           .backgroundColor(AppColors.CARD_BG)

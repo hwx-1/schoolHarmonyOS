@@ -60,8 +60,13 @@ export interface Announcement {
   title: string;
   summary: string;
   body: string;
+  image_url?: string;
+  link_url?: string;
+  link_text?: string;
   published: boolean;
   created_at: string;
+  updated_at?: string;
+  published_at?: string;
 }
 
 export interface CampusTool {
@@ -134,7 +139,21 @@ export interface AIMessage {
   text: string;
   model?: string;
   source?: string;
+  needs_feedback?: boolean;
+  feedback?: string;
   created_at: string;
+}
+
+export interface Appeal {
+  id: number;
+  punishment_id: number;
+  account_id: number;
+  kind: string;
+  reason: string;
+  status: string;
+  result?: string;
+  created_at: string;
+  resolved_at?: string;
 }
 
 export interface AIConversation {
@@ -174,6 +193,12 @@ export interface SmsCodeBody {
   purpose: string;
 }
 
+export interface ResetPasswordBody {
+  phone: string;
+  code: string;
+  password: string;
+}
+
 export interface UpdateProfileBody {
   nickname: string;
   avatar: string;
@@ -202,7 +227,12 @@ export interface CreatePostBody {
 
 export interface CreateCommentBody {
   text: string;
+  image?: string;
   parent_id?: number;
+}
+
+export interface ReportBody {
+  reason: string;
 }
 
 export interface MarkNotificationsReadBody {
@@ -232,6 +262,15 @@ export interface AskAIBody {
   model?: string;
 }
 
+export interface AIFeedbackBody {
+  satisfied: boolean;
+}
+
+export interface CreateAppealBody {
+  punishment_id: number;
+  reason: string;
+}
+
 /** ---- 响应包装 ---- */
 
 export interface ApiErrorPayload {
@@ -254,6 +293,10 @@ export interface SmsCodeResp {
   expires_in: number;
 }
 
+export interface ResetPasswordResp {
+  reset: boolean;
+}
+
 export interface ItemsResp<T> {
   items: T[];
 }
@@ -262,9 +305,27 @@ export interface PostResp {
   post: Post;
 }
 
+export interface PublicUserResp {
+  user: PublicAccount;
+  posts: Post[];
+}
+
+export interface AnnouncementResp {
+  announcement: Announcement;
+}
+
+export interface MessageResp {
+  message: string;
+}
+
 export interface CreatePostResp {
   post: Post;
   moderation: ModerationInfo;
+  message: string;
+}
+
+export interface UpdatePostResp {
+  post: Post;
   message: string;
 }
 
@@ -328,6 +389,16 @@ export interface AskAIResp {
   remaining: number;
 }
 
+export interface AIFeedbackResp {
+  message?: AIMessage;
+  answer?: AIMessage;
+  remaining: number;
+}
+
+export interface SubmitAppealResp {
+  submitted: boolean;
+}
+
 export interface UploadResp {
   url: string;
   dev_mode: boolean;
@@ -337,6 +408,24 @@ export interface UploadResp {
 
 export interface PostDetailParam {
   id: number;
+}
+
+export interface ComposeParam {
+  id: number;
+}
+
+export interface PublicProfileParam {
+  id: number;
+}
+
+export interface ReportParam {
+  targetType: string;
+  targetId: number;
+  targetName: string;
+}
+
+export interface VerificationParam {
+  onboarding: boolean;
 }
 
 export interface NotificationDetailParam {
@@ -363,4 +452,8 @@ export interface AIChatParam {
 
 export interface ContentListParam {
   mode: string;
+}
+
+export interface AppealsParam {
+  punishmentId: number;
 }
