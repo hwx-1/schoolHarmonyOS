@@ -22,6 +22,10 @@ export struct NavBar {
   rightColor: ResourceColor = AppColors.PRIMARY;
   rightEnabled: boolean = true;
   onRight: () => void = () => {};
+  /** rightText 左侧的次级文字操作，如 AI 对话页的「对话记录」。 */
+  rightSecondaryText: string = '';
+  rightSecondaryColor: ResourceColor = AppColors.TEXT_SECONDARY;
+  onRightSecondary: () => void = () => {};
   /** 右侧实心按钮（优先级高于 rightText），如「+ 新会话」。 */
   rightButtonText: string = '';
   onRightButton: () => void = () => {};
@@ -56,7 +60,10 @@ export struct NavBar {
         }
       }
       .alignItems(HorizontalAlign.Center)
-      .padding({ left: 72, right: 72 })
+      .padding({
+        left: this.rightSecondaryText.length > 0 ? 108 : 72,
+        right: this.rightSecondaryText.length > 0 ? 108 : 72
+      })
 
       // 左右操作区
       Row() {
@@ -75,6 +82,13 @@ export struct NavBar {
             .onClick(() => this.onBack())
         }
         Blank()
+        if (this.rightSecondaryText.length > 0) {
+          Text(this.rightSecondaryText)
+            .fontSize(13)
+            .fontColor(this.rightSecondaryColor)
+            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .onClick(() => this.onRightSecondary())
+        }
         if (this.rightButtonText.length > 0) {
           Button(this.rightButtonText)
             .height(32)

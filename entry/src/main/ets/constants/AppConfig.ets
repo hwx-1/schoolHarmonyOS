@@ -9,6 +9,8 @@ export class AppConfig {
   // 生产环境统一走 HTTPS，避免真机网络变化导致接口地址失效。
   static readonly API_BASE_URL: string = 'https://xsnbb.xyz';
   static readonly REQUEST_TIMEOUT_MS: number = 15000;
+  /** SSE 流式回答的读超时：大模型生成较慢，与安卓端一致放宽到 120s。 */
+  static readonly STREAM_TIMEOUT_MS: number = 120000;
   static readonly MAX_POST_IMAGES: number = 9;
   static readonly MAX_POST_TAGS: number = 3;
 

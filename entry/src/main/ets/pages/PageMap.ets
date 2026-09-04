@@ -6,7 +6,6 @@ import { ComposePage } from './Compose';
 import { SearchPage } from './Search';
 import { AnnouncementsPage } from './Announcements';
 import { ToolsPage } from './Tools';
-import { AIAssistantPage } from './AIAssistant';
 import { ChatPage } from './Chat';
 import { AIChatPage } from './AIChat';
 import { ContentListPage } from './ContentList';
@@ -75,7 +74,8 @@ export function PageMap(name: string, param: Object | undefined) {
   } else if (name === 'Tools') {
     ToolsPage()
   } else if (name === 'AI') {
-    AIAssistantPage()
+    // 直接进入 AI 页：id 为 0 时自动创建新会话并替换为 AIChat 路由（与安卓端一致）
+    AIChatPage({ conversationId: 0, conversationTitle: '' })
   } else if (name === 'Chat') {
     ChatPage({
       conversationId: (param as ChatParam).id,

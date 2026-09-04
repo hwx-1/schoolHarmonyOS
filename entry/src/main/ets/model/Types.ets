@@ -137,11 +137,23 @@ export interface AIMessage {
   id: number;
   role: string;
   text: string;
+  /** 模型给出最终答案前的思考过程（流式 reasoning_content）。 */
+  reasoning?: string;
   model?: string;
   source?: string;
   needs_feedback?: boolean;
   feedback?: string;
   created_at: string;
+}
+
+/** SSE 流式回答事件：type = thinking / text / done / error。 */
+export interface AIStreamEvent {
+  type: string;
+  delta?: string;
+  message?: string;
+  user_message?: AIMessage;
+  answer?: AIMessage;
+  remaining?: number;
 }
 
 export interface Appeal {

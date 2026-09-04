@@ -13,7 +13,8 @@ Stage 模型（UIAbility），target/compatibleSdkVersion 6.1.0(23)，默认连�
 - 公开用户主页：公开资料与帖子、发起私信；帖子 / 评论 / 用户 / 私信均可举报
 - 搜索（关键词 / 话题标签）、校园公告（展开全文）、校园百宝箱（openLink 打开外链）
 - 消息：系统通知（未读数 / 一键已读）、私信会话列表与聊天（含「自由聊」状态、前台实时接收新消息）
-- AI 校园助手：模型选择、会话列表、剩余次数、新建 / 删除会话、问答、知识库答案反馈与联网重答
+- AI 校园助手：进入即开新会话，SSE 流式回答（思考过程可展开 / 收起）、回答去 Markdown 记号后展示、
+  右上角「对话记录」半模态弹层切换 / 删除会话、「新对话」、今日剩余次数、知识库答案反馈与联网重答
 - 账号处罚申诉：从处罚通知直接发起申诉，并查看历史申诉及处理结果
 - 我的：资料卡与完整度、编辑资料、学生认证（材料上传）、修改密码、注销账号、退出登录
 
@@ -35,6 +36,8 @@ Stage 模型（UIAbility），target/compatibleSdkVersion 6.1.0(23)，默认连�
   反例：2026-09 消息页键值只用会话 id，导致已读后未读冒泡不消失、新消息预览不刷新
 - **鉴权**：服务端为 Cookie 会话；`service/Http.ets` 内置 CookieJar，
   自动捕获 Set-Cookie、携带 Cookie，非 GET 请求自动附加 `X-CSRF-Token`
+- **SSE 流式**：`service/Http.ets` 的 `streamRequest` 基于 `http.requestInStream` + `dataReceive` 事件
+  逐行解析 `data:` 载荷（`Api.askAIStream` 消费 thinking / text / done / error 事件），读超时 120s
 - **长列表**：首页信息流使用 `LazyForEach + BasicDataSource` 按需加载与刷新
 - **深色模式**：`resources/dark/element/color.json` 覆盖基础配色
 
@@ -48,9 +51,9 @@ apps/harmony/
 │   │   ├── entryability/     # EntryAbility（Stage 模型）
 │   │   ├── pages/            # 14 个页面（@Entry）
 │   │   ├── components/       # common 通用组件 / business 业务组件 / tabs 主 Tab
-│   │   ├── service/          # Http（Cookie/CSRF/上传）、Api（端点封装）、Session
+│   │   ├── service/          # Http（Cookie/CSRF/上传/SSE 流式）、Api（端点封装）、Session
 │   │   ├── model/            # 与 /api/v1 对应的类型契约
-│   │   ├── utils/            # Json、TimeUtil、BasicDataSource
+│   │   ├── utils/            # Json、TimeUtil、BasicDataSource、AIText（AI 回答去 Markdown）
 │   │   └── constants/        # 接口地址与设计基线色值
 │   ├── resources/            # 字符串 / 颜色 / 图标 / 页面清单 / 网络安全配置
 │   └── module.json5          # 模块配置（INTERNET 权限、cleartext 放行 localhost）

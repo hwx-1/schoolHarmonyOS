@@ -1,6 +1,8 @@
 import { http } from '@kit.NetworkKit';
-import { request } from './Http';
+import { request, streamRequest } from './Http';
 import { AppState } from './AppState';
+import { AppConfig } from '../constants/AppConfig';
+import { Json } from '../utils/Json';
 import {
   AccountResp,
   Appeal,
@@ -10,6 +12,7 @@ import {
   AIConversationResp,
   AIConversationsResp,
   AIModel,
+  AIStreamEvent,
   Announcement,
   AnnouncementResp,
   AppNotification,
@@ -307,6 +310,46 @@ export class Api {
     }
     return request<AskAIResp>(
       http.RequestMethod.POST, `/api/v1/ai/conversations/${id}/messages`, body);
+  }
+
+  /**
+   * SSE 流式问答：thinking / text 增量与 done / error 事件依次回调。
+   * Mock 模式下退化为非流式接口，并合成 text + done 两个事件。
+   */
+  static async askAIStream(
+    id: number,
+    text: string,
+    model: string,
+    onEvent: (event: AIStreamEvent) => void,
+  ): Promise<void> {
+    const body: AskAIBody = { text };
+    if (model.length > 0) {
+      body.model = model;
+    }
+    if (AppConfig.USE_LOCAL_MOCK) {
+      const resp = await Api.askAI(id, text, model);
+      const textEvent: AIStreamEvent = { type: 'text', delta: resp.answer.text };
+      onEvent(textEvent);
+      const doneEvent: AIStreamEvent = {
+        type: 'done',
+        user_message: resp.user_message,
+        answer: resp.answer,
+        remaining: resp.remaining,
+      };
+      onEvent(doneEvent);
+      return;
+    }
+    await streamRequest(
+      http.RequestMethod.POST, `/api/v1/ai/conversations/${id}/messages/stream`, body,
+      (payload: string) => {
+        if (payload.length === 0 || payload === '[DONE]') {
+          return;
+        }
+        const event = Json.tryParse<AIStreamEvent | null>(payload, null);
+        if (event && typeof event.type === 'string') {
+          onEvent(event);
+        }
+      });
   }
 
   static aiFeedback(id: number, messageId: number, satisfied: boolean): Promise<AIFeedbackResp> {

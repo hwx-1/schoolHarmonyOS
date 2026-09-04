@@ -1,4 +1,5 @@
 import { http } from '@kit.NetworkKit';
+import { util } from '@kit.ArkTS';
 import { AppConfig } from '../constants/AppConfig';
 import { ApiErrorBody } from '../model/Types';
 import { Json } from '../utils/Json';
@@ -78,22 +79,7 @@ async function rawRequest(
 ): Promise<HttpResult<string>> {
   const client = http.createHttp();
   try {
-    const header: Record<string, string> = {
-      'Accept': 'application/json',
-    };
-    const cookie = CookieJar.header();
-    if (cookie.length > 0) {
-      header['Cookie'] = cookie;
-    }
-    if (bodyText !== undefined) {
-      header['Content-Type'] = 'application/json';
-    }
-    if (method !== http.RequestMethod.GET) {
-      const csrf = CookieJar.csrfToken();
-      if (csrf.length > 0) {
-        header['X-CSRF-Token'] = csrf;
-      }
-    }
+    const header = buildHeaders(method, bodyText !== undefined, 'application/json');
     Object.keys(extraHeaders).forEach((key: string) => {
       header[key] = extraHeaders[key];
     });
@@ -146,6 +132,139 @@ export async function request<T>(
     );
   }
   return Json.parse<T>(result.data);
+}
+
+function buildHeaders(method: http.RequestMethod, hasBody: boolean, accept: string): Record<string, string> {
+  const header: Record<string, string> = {
+    'Accept': accept,
+  };
+  const cookie = CookieJar.header();
+  if (cookie.length > 0) {
+    header['Cookie'] = cookie;
+  }
+  if (hasBody) {
+    header['Content-Type'] = 'application/json';
+  }
+  if (method !== http.RequestMethod.GET) {
+    const csrf = CookieJar.csrfToken();
+    if (csrf.length > 0) {
+      header['X-CSRF-Token'] = csrf;
+    }
+  }
+  return header;
+}
+
+/**
+ * SSE 流式请求：逐行读取 `data:` 事件并回调 payload 文本（已去掉 `data:` 前缀）。
+ * 忽略 event/id/retry 行与空行；服务端响应非 2xx 时在流结束后抛出 ApiError。
+ * 回调在主线程（ArkTS 单线程事件循环）触发，可直接更新 @State。
+ */
+export function streamRequest(
+  method: http.RequestMethod,
+  path: string,
+  body: object | undefined,
+  onData: (payload: string) => void,
+): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    const client = http.createHttp();
+    const decoder = util.TextDecoder.create('utf-8');
+    let status = 0;
+    let requestDone = false;
+    let dataEnded = false;
+    let settled = false;
+    let pending = '';
+    let rawText = '';
+
+    const finish = (err?: ApiError): void => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      client.off('headersReceive');
+      client.off('dataReceive');
+      client.off('dataEnd');
+      client.destroy();
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    };
+
+    const emitLine = (line: string): void => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('data:')) {
+        onData(trimmed.substring(5).trim());
+      }
+    };
+
+    const tryComplete = (): void => {
+      if (!requestDone || !dataEnded) {
+        return;
+      }
+      if (status < 200 || status >= 300) {
+        const payload = Json.tryParse<ApiErrorBody>(rawText, {});
+        finish(new ApiError(
+          status,
+          payload.error?.code ?? 'UNKNOWN',
+          payload.error?.message ?? '请求失败，请稍后重试',
+        ));
+        return;
+      }
+      if (pending.length > 0) {
+        emitLine(pending);
+        pending = '';
+      }
+      finish();
+    };
+
+    client.on('headersReceive', (headers: Object) => {
+      const headerMap = headers as Record<string, string | string[]>;
+      CookieJar.absorb(headerMap['set-cookie'] ?? headerMap['Set-Cookie']);
+    });
+    client.on('dataReceive', (chunk: ArrayBuffer) => {
+      const text = decoder.decodeToString(new Uint8Array(chunk), { stream: true });
+      // 错误响应体一般很短，截断保留即可用于解析 error.message
+      if (rawText.length < 4096) {
+        rawText += text;
+      }
+      pending += text;
+      let newline = pending.indexOf('\n');
+      while (newline >= 0) {
+        emitLine(pending.substring(0, newline));
+        pending = pending.substring(newline + 1);
+        newline = pending.indexOf('\n');
+      }
+    });
+    client.on('dataEnd', () => {
+      dataEnded = true;
+      tryComplete();
+    });
+
+    const bodyText = body === undefined ? undefined : JSON.stringify(body);
+    client.requestInStream(`${AppConfig.API_BASE_URL}${path}`, {
+      method: method,
+      header: buildHeaders(method, bodyText !== undefined, 'text/event-stream'),
+      extraData: bodyText,
+      usingCache: false,
+      connectTimeout: AppConfig.REQUEST_TIMEOUT_MS,
+      readTimeout: AppConfig.STREAM_TIMEOUT_MS,
+    }).then((code: number) => {
+      status = code;
+      requestDone = true;
+      tryComplete();
+      if (code < 200 || code >= 300) {
+        // 错误响应可能没有响应体、不触发 dataEnd：短暂等待后强制结束，避免挂起
+        setTimeout(() => {
+          dataEnded = true;
+          tryComplete();
+        }, 300);
+      }
+    }).catch((err: Error) => {
+      const message = err instanceof Error ? err.message : 'network error';
+      finish(new ApiError(0, 'NETWORK_ERROR', `暂时无法连接服务器，请检查网络后重试（${message}）`));
+    });
+  });
 }
 
 /** 图片上传：multipart/form-data。 */
